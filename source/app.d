@@ -10,7 +10,16 @@ void main() {
 		writeln("an error occurred initializing the renderer");
 	}
 
-	readln();
+	bool quit = false;
+	while (!quit) {
+		// handle event queue
+		SDL_Event event;
+		while (SDL_PollEvent(&event) != 0) {
+			if (event.type == SDL_QUIT) {
+				quit = true;
+			}
+		}
+	}
 
 	cleanup(&state);
 }
