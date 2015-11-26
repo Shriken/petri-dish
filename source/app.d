@@ -10,5 +10,7 @@ void main() {
 		writeln("an error occurred initializing the renderer");
 	}
 
-	while (1) {}
+	readln();
+
+	cleanup(&state);
 }
