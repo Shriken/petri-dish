@@ -3,6 +3,7 @@ import derelict.sdl2.sdl;
 
 import render;
 import render_state;
+import event_handler;
 
 void main() {
 	RenderState state = new RenderState();
@@ -10,14 +11,11 @@ void main() {
 		writeln("an error occurred initializing the renderer");
 	}
 
-	bool quit = false;
-	while (!quit) {
+	while (state.running) {
 		// handle event queue
 		SDL_Event event;
 		while (SDL_PollEvent(&event) != 0) {
-			if (event.type == SDL_QUIT) {
-				quit = true;
-			}
+			handleEvent(&state, event);
 		}
 	}
 
