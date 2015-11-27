@@ -14,8 +14,8 @@ bool initRenderer(RenderState *state) {
 		"Petri dish",
 		SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED,
-		640,
-		480,
+		state.windowWidth,
+		state.windowHeight,
 		SDL_WINDOW_SHOWN
 	);
 
