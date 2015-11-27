@@ -10,9 +10,17 @@ void handleEvent(State *state, SDL_Event event) {
 			state.simState.running = false;
 			break;
 		case SDL_KEYDOWN:
-			if (event.key.keysym.sym == SDLK_q) {
-				state.simState.running = false;
-			}
+			handleKey(state, event.key.keysym.sym);
+			break;
+		default:
+			break;
+	}
+}
+
+void handleKey(State *state, SDL_Keycode keycode) {
+	switch (keycode) {
+		case SDLK_q:
+			state.simState.running = false;
 			break;
 		default:
 			break;
