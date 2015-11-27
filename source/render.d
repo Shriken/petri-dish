@@ -26,7 +26,7 @@ bool initRenderer(RenderState *state) {
 	return true;
 }
 
-void cleanup(RenderState *state) {
+void cleanupRenderer(RenderState *state) {
 	SDL_DestroyWindow(state.window);
 	SDL_Quit();
 }

@@ -1,17 +1,17 @@
 import std.stdio;
 import derelict.sdl2.sdl;
 
+import state;
 import render;
-import render_state;
 import event_handler;
 
 void main() {
-	RenderState state = new RenderState();
-	if (!initRenderer(&state)) {
+	State state = new State();
+	if (!initRenderer(&state.renderState)) {
 		writeln("an error occurred initializing the renderer");
 	}
 
-	while (state.running) {
+	while (state.simState.running) {
 		// handle event queue
 		SDL_Event event;
 		while (SDL_PollEvent(&event) != 0) {
@@ -19,5 +19,5 @@ void main() {
 		}
 	}
 
-	cleanup(&state);
+	cleanupRenderer(&state.renderState);
 }
