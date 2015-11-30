@@ -3,6 +3,7 @@ import gfm.math.vector;
 import derelict.sdl2.sdl;
 
 import cell;
+import food;
 import state;
 import render_state;
 
@@ -16,6 +17,10 @@ void render(State *state) {
 		cell.render(renderState);
 	}
 
+	foreach (ref Food food; state.simState.food) {
+		food.render(renderState);
+	}
+
 	SDL_RenderPresent(renderState.renderer);
 }
 
@@ -23,6 +28,10 @@ void drawRect(
 	RenderState *state,
 	Vector!(double, 2) topLeft,
 	Vector!(double, 2) dimensions,
+	ubyte r,
+	ubyte g,
+	ubyte b,
+	ubyte a,
 ) {
 	SDL_Rect rect;
 	rect.x = cast(int)topLeft.x + state.windowWidth  / 2;
@@ -30,7 +39,7 @@ void drawRect(
 	rect.w = cast(int)dimensions.x;
 	rect.h = cast(int)dimensions.y;
 
-	SDL_SetRenderDrawColor(state.renderer, 255, 0, 0, 255);
+	SDL_SetRenderDrawColor(state.renderer, r, g, b, a);
 	SDL_RenderFillRect(state.renderer, &rect);
 }
 
