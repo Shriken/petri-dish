@@ -4,6 +4,7 @@
 	"copyright": "Copyright © 2015, Zane Sterling",
 	"authors": ["Zane Sterling"],
 	"dependencies": {
-		"derelict-sdl2": "~>1.9.7"
+		"derelict-sdl2": "~>1.9.7",
+		"gfm:math": "~>3.0"
 	}
 }

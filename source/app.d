@@ -3,6 +3,7 @@ import derelict.sdl2.sdl;
 
 import state;
 import render;
+import update;
 import event_handler;
 
 void main() {
@@ -17,6 +18,9 @@ void main() {
 		while (SDL_PollEvent(&event) != 0) {
 			handleEvent(&state, event);
 		}
+
+		update.update(&state.simState);
+		render.render(&state);
 	}
 
 	cleanupRenderer(&state.renderState);
