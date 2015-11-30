@@ -33,6 +33,7 @@ void main() {
 			handleEvent(&state, event);
 		}
 
+		// update and render
 		update.update(&state.simState);
 		render.render(&state);
 	}

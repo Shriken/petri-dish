@@ -6,11 +6,15 @@ const double VISCOSITY = 1.01;
 const double VISCOSITY_SLOWING_FACTOR = 1 / VISCOSITY;
 
 void update(SimulationState *state) {
+	auto FIELD_RAD = state.FIELD_RAD;
 	auto cell = &state.cell;
+	auto pos = &cell.pos;
+
+	// update position
 	cell.pos += cell.vel;
 
-	auto pos = &cell.pos;
-	auto FIELD_RAD = state.FIELD_RAD;
+	// simulate viscosity
+	cell.vel *= VISCOSITY_SLOWING_FACTOR;
 
 	// constrain cell to field bounds
 	if (pos.x < -FIELD_RAD) {
@@ -28,6 +32,4 @@ void update(SimulationState *state) {
 		pos.y = 2 * FIELD_RAD - pos.y;
 		cell.vel.y *= -1;
 	}
-
-	cell.vel *= VISCOSITY_SLOWING_FACTOR;
 }
