@@ -2,6 +2,8 @@ import std.stdio;
 
 import sim_state;
 
+const double VISCOSITY = 1.0001;
+
 void update(SimulationState *state) {
 	auto cell = &state.cell;
 	cell.pos += cell.vel;
@@ -24,4 +26,6 @@ void update(SimulationState *state) {
 		pos.y = 2 * FIELD_RAD - pos.y;
 		cell.vel.y *= -1;
 	}
+
+	cell.vel /= VISCOSITY;
 }
