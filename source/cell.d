@@ -10,7 +10,7 @@ class Cell {
 
 	this() {
 		pos = Vector!(double, 2)(0, 100);
-		vel = Vector!(double, 2)(-0.3, -0.3);
+		vel = Vector!(double, 2)(-1, -1);
 		rad = 5;
 	}
 

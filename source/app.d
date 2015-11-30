@@ -1,10 +1,16 @@
 import std.stdio;
+import std.datetime;
+import core.thread;
 import derelict.sdl2.sdl;
 
 import state;
 import render;
 import update;
 import event_handler;
+
+const int TICKS_PER_SECOND = 60;
+const int MICROS_PER_TICK = 1000_000 / TICKS_PER_SECOND;
+const int SLEEP_THRESHOLD = 1000;
 
 void main() {
 	State state = new State();
@@ -13,6 +19,14 @@ void main() {
 	}
 
 	while (state.simState.running) {
+		// cap ticks-per-second
+		auto mt = measureTime!((TickDuration duration) {
+			auto usecsLeft = MICROS_PER_TICK - duration.usecs;
+			if (usecsLeft > SLEEP_THRESHOLD) {
+				Thread.sleep(dur!"usecs"(usecsLeft));
+			}
+		});
+
 		// handle event queue
 		SDL_Event event;
 		while (SDL_PollEvent(&event) != 0) {
