@@ -1,3 +1,5 @@
+import std.math;
+import std.random;
 import gfm.math.vector;
 
 import render;
@@ -10,7 +12,9 @@ class Cell {
 
 	this(double x, double y) {
 		pos = Vector!(double, 2)(x, y);
-		vel = Vector!(double, 2)(-1, -1);
+
+		auto velAngle = uniform(0, 2 * PI);
+		vel = Vector!(double, 2)(cos(velAngle), sin(velAngle));
 		rad = 5;
 	}
 
