@@ -21,8 +21,8 @@ void drawRect(
 	Vector!(double, 2) dimensions,
 ) {
 	SDL_Rect rect;
-	rect.x = cast(int)topLeft.x;
-	rect.y = cast(int)topLeft.y;
+	rect.x = cast(int)topLeft.x + state.windowWidth  / 2;
+	rect.y = cast(int)topLeft.y + state.windowHeight / 2;
 	rect.w = cast(int)dimensions.x;
 	rect.h = cast(int)dimensions.y;
 
