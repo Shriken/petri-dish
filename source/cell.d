@@ -8,8 +8,8 @@ class Cell {
 	Vector!(double, 2) vel;
 	double rad;
 
-	this() {
-		pos = Vector!(double, 2)(0, 100);
+	this(double x, double y) {
+		pos = Vector!(double, 2)(x, y);
 		vel = Vector!(double, 2)(-1, -1);
 		rad = 5;
 	}

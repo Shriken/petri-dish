@@ -2,6 +2,7 @@ import std.stdio;
 import gfm.math.vector;
 import derelict.sdl2.sdl;
 
+import cell;
 import state;
 import render_state;
 
@@ -11,7 +12,10 @@ void render(State *state) {
 	SDL_SetRenderDrawColor(renderState.renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderState.renderer);
 
-	state.simState.cell.render(renderState);
+	foreach (ref Cell cell; state.simState.cells) {
+		cell.render(renderState);
+	}
+
 	SDL_RenderPresent(renderState.renderer);
 }
 
