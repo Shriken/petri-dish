@@ -5,25 +5,35 @@ import gfm.math.vector;
 import render;
 import render_state;
 
+const double RAD_PER_FOOD = 0.5;
+const double BASE_RAD = 2;
+
 class Cell {
 	Vector!(double, 2) pos;
 	Vector!(double, 2) vel;
-	double foodLevel = 0;
-	double rad;
+	double foodLevel = 8;
 
 	this(double x, double y) {
 		pos = Vector!(double, 2)(x, y);
 
 		auto velAngle = uniform(0, 2 * PI);
 		vel = Vector!(double, 2)(cos(velAngle), sin(velAngle));
-		rad = 4;
 	}
 
 	void render(RenderState *state) {
+		auto rad = this.rad;
 		state.drawRect(
-			pos - Vector!(double, 2)(rad / 2, rad / 2),
+			pos - Vector!(double, 2)(rad, rad),
 			Vector!(double, 2)(rad * 2, rad * 2),
 			0xff, 0, 0, 0xff
 		);
+	}
+
+	double rad() {
+		return BASE_RAD + foodLevel * RAD_PER_FOOD;
+	}
+
+	double foodConsumption() {
+		return 0.01;
 	}
 };

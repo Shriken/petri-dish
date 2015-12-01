@@ -54,6 +54,15 @@ void update(SimulationState *state) {
 		}
 	}
 
+	for (int i = 0; i < state.cells.length; i++) {
+		Cell *cell = &state.cells[i];
+		cell.foodLevel -= cell.foodConsumption();
+		if (cell.foodLevel <= 0) {
+			state.cells.remove(i--);
+			state.cells.length--;
+		}
+	}
+
 	for (int i = 0; i < state.food.length; i++) {
 		if (state.food[i].shouldDie) {
 			state.food.remove(i--);
