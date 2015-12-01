@@ -14,30 +14,7 @@ void update(SimulationState *state) {
 
 	// update cell positions
 	foreach (ref Cell cell; state.cells) {
-		auto pos = &cell.pos;
-
-		// update position
-		cell.pos += cell.vel;
-
-		// simulate viscosity
-		cell.vel *= VISCOSITY_SLOWING_FACTOR;
-
-		// constrain cell to field bounds
-		if (pos.x < -FIELD_RAD) {
-			pos.x = -pos.x - 2 * FIELD_RAD;
-			cell.vel.x *= -1;
-		} else if (pos.x > FIELD_RAD) {
-			pos.x = 2 * FIELD_RAD - pos.x;
-			cell.vel.x *= -1;
-		}
-
-		if (pos.y < -FIELD_RAD) {
-			pos.y = -pos.y - 2 * FIELD_RAD;
-			cell.vel.y *= -1;
-		} else if (pos.y > FIELD_RAD) {
-			pos.y = 2 * FIELD_RAD - pos.y;
-			cell.vel.y *= -1;
-		}
+		updatePos(state, cell);
 	}
 
 	// TODO check for collision
@@ -75,5 +52,33 @@ void update(SimulationState *state) {
 		auto x = uniform(-FIELD_RAD, FIELD_RAD);
 		auto y = uniform(-FIELD_RAD, FIELD_RAD);
 		state.food ~= new Food(x, y);
+	}
+}
+
+void updatePos(SimulationState *state, ref Cell cell) {
+	auto FIELD_RAD = state.FIELD_RAD;
+	auto pos = &cell.pos;
+
+	// update position
+	cell.pos += cell.vel;
+
+	// simulate viscosity
+	cell.vel *= VISCOSITY_SLOWING_FACTOR;
+
+	// constrain cell to field bounds
+	if (pos.x < -FIELD_RAD) {
+		pos.x = -pos.x - 2 * FIELD_RAD;
+		cell.vel.x *= -1;
+	} else if (pos.x > FIELD_RAD) {
+		pos.x = 2 * FIELD_RAD - pos.x;
+		cell.vel.x *= -1;
+	}
+
+	if (pos.y < -FIELD_RAD) {
+		pos.y = -pos.y - 2 * FIELD_RAD;
+		cell.vel.y *= -1;
+	} else if (pos.y > FIELD_RAD) {
+		pos.y = 2 * FIELD_RAD - pos.y;
+		cell.vel.y *= -1;
 	}
 }
