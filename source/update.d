@@ -31,13 +31,31 @@ void update(SimulationState *state) {
 		}
 	}
 
+	Cell[] newCells;
 	for (int i = 0; i < state.cells.length; i++) {
+		// drain cells' energy
 		Cell *cell = &state.cells[i];
 		cell.foodLevel -= cell.foodConsumption();
+
 		if (cell.foodLevel <= 0) {
 			state.cells.remove(i--);
 			state.cells.length--;
+		} else if (cell.foodLevel >= cell.reproductionThreshold) {
+			// if you have enough food, reproduce!
+			cell.foodLevel /= 2;
+			cell.vel.x -= 1;
+
+			Cell newCell = new Cell(cell.pos.x, cell.pos.y);
+			newCell.foodLevel = cell.foodLevel;
+			newCell.vel = cell.vel;
+			newCell.vel.x += 2;
+
+			newCells ~= newCell;
 		}
+	}
+
+	foreach (ref Cell cell; newCells) {
+		state.cells ~= cell;
 	}
 
 	for (int i = 0; i < state.food.length; i++) {

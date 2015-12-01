@@ -12,9 +12,14 @@ class Cell {
 	Vector!(double, 2) pos;
 	Vector!(double, 2) vel;
 	double foodLevel = 8;
+	double reproductionThreshold = 6;
 
 	this(double x, double y) {
-		pos = Vector!(double, 2)(x, y);
+		this(Vector!(double, 2)(x, y));
+	}
+
+	this(Vector!(double, 2) pos) {
+		this.pos = pos;
 
 		auto velAngle = uniform(0, 2 * PI);
 		vel = Vector!(double, 2)(cos(velAngle), sin(velAngle));
