@@ -42,15 +42,7 @@ void update(SimulationState *state) {
 			state.cells.length--;
 		} else if (cell.foodLevel >= cell.reproductionThreshold) {
 			// if you have enough food, reproduce!
-			cell.foodLevel /= 2;
-			cell.vel.x -= 1;
-
-			Cell newCell = new Cell(cell.pos.x, cell.pos.y);
-			newCell.foodLevel = cell.foodLevel;
-			newCell.vel = cell.vel;
-			newCell.vel.x += 2;
-
-			newCells ~= newCell;
+			newCells ~= cell.reproduce();
 		}
 	}
 

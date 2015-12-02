@@ -41,4 +41,16 @@ class Cell {
 	double foodConsumption() {
 		return 0.01;
 	}
+
+	Cell reproduce() {
+		Cell newCell = new Cell(this.pos.x, this.pos.y);
+		newCell.vel = this.vel;
+		newCell.vel.x += 1;
+		newCell.foodLevel = this.foodLevel / 2;
+
+		this.foodLevel /= 2;
+		this.vel.x -= 1;
+
+		return newCell;
+	}
 };
