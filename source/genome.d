@@ -54,7 +54,11 @@ struct CellMode {
 	Color color;
 };
 
-void print(Genome genome, File file) {
+void save(Genome genome, string filename) {
+	File(filename, "w").print(genome);
+}
+
+void print(File file, Genome genome) {
 	file.writeln("numModes: ", genome.cellModes.length);
 	file.writeln();
 
