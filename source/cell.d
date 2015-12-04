@@ -2,6 +2,7 @@ import std.math;
 import std.random;
 import gfm.math.vector;
 
+import genome;
 import render;
 import render_state;
 
@@ -12,13 +13,27 @@ class Cell {
 	Vector!(double, 2) pos;
 	Vector!(double, 2) vel;
 	double foodLevel = 8;
-	double reproductionThreshold = 6;
+	double angle = 0;
+	CellMode *mode;
+	Genome genome;
 
-	this(double x, double y) {
-		this(Vector!(double, 2)(x, y));
+	@disable this();
+
+	this(Cell cell) {
+		this.pos = cell.pos;
+		this.vel = cell.vel;
+		this.foodLevel = cell.foodLevel;
+		this.angle = cell.angle;
+		this.mode = cell.mode;
+		this.genome = cell.genome;
 	}
 
-	this(Vector!(double, 2) pos) {
+	this(double x, double y, CellMode *mode) {
+		this(Vector!(double, 2)(x, y), mode);
+	}
+
+	this(Vector!(double, 2) pos, CellMode *mode) {
+		this.mode = mode;
 		this.pos = pos;
 
 		auto velAngle = uniform(0, 2 * PI);
@@ -43,12 +58,10 @@ class Cell {
 	}
 
 	Cell reproduce() {
-		Cell newCell = new Cell(this.pos.x, this.pos.y);
-		newCell.vel = this.vel;
-		newCell.vel.x += 1;
-		newCell.foodLevel = this.foodLevel / 2;
-
 		this.foodLevel /= 2;
+
+		Cell newCell = new Cell(this);
+		newCell.vel.x += 1;
 		this.vel.x -= 1;
 
 		return newCell;

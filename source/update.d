@@ -40,7 +40,7 @@ void update(SimulationState *state) {
 		if (cell.foodLevel <= 0) {
 			state.cells.remove(i--);
 			state.cells.length--;
-		} else if (cell.foodLevel >= cell.reproductionThreshold) {
+		} else if (cell.foodLevel >= cell.mode.splitThreshold) {
 			// if you have enough food, reproduce!
 			newCells ~= cell.reproduce();
 		}
