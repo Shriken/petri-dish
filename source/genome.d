@@ -1,5 +1,9 @@
 module genome;
 
+import std.stdio;
+import std.string;
+import std.algorithm;
+
 import misc.color;
 
 /+
@@ -8,7 +12,13 @@ import misc.color;
  +/
 
 class Genome {
-	CellMode[16] cellModes;
+	CellMode[] cellModes;
+
+	this() {
+		foreach (i; 0 .. 16) {
+			cellModes ~= CellMode();
+		}
+	}
 };
 
 enum CellType {
@@ -25,9 +35,9 @@ enum CellType {
 };
 
 struct CellMode {
-	bool makeAdhesin = false;
 	CellType cellType;
 
+	bool makeAdhesin = false;
 	double nutrientPriority;
 	double splitThreshold = 2.5;
 	double splitRatio = 1;
@@ -43,3 +53,29 @@ struct CellMode {
 
 	Color color;
 };
+
+void print(Genome genome, File file) {
+	file.writeln("numModes: ", genome.cellModes.length);
+	file.writeln();
+
+	foreach (mode; genome.cellModes) {
+		file.writeln("cellType: ", mode.cellType);
+
+		file.writeln("makeAdhesin: ", mode.makeAdhesin);
+		file.writeln("nutrientPriority: ", mode.nutrientPriority);
+		file.writeln("splitThreshold: ", mode.splitThreshold);
+		file.writeln("splitRatio: ", mode.splitRatio);
+		file.writeln("splitAngle: ", mode.splitAngle);
+
+		file.writeln("child1Rotation: ", mode.child1Rotation);
+		file.writeln("child1Mode: ", mode.child1Mode);
+		file.writeln("child1KeepAdhesin: ", mode.child1KeepAdhesin);
+
+		file.writeln("child2Rotation: ", mode.child2Rotation);
+		file.writeln("child2Mode: ", mode.child2Mode);
+		file.writeln("child2KeepAdhesin: ", mode.child2KeepAdhesin);
+
+		file.writeln("color: ", mode.color);
+		file.writeln();
+	}
+}
