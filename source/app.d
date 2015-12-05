@@ -34,7 +34,9 @@ void main() {
 		}
 
 		// update and render
-		update.update(&state.simState);
+		if (!state.paused) {
+			update.update(&state.simState);
+		}
 		render.render(&state);
 	}
 

@@ -22,6 +22,9 @@ void handleKey(State *state, SDL_Keycode keycode) {
 		case SDLK_q:
 			state.simState.running = false;
 			break;
+		case SDLK_p:
+			state.paused = !state.paused;
+			break;
 		default:
 			break;
 	}
