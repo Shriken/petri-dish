@@ -58,10 +58,12 @@ void update(SimulationState *state) {
 	}
 
 	// generate new food
-	if (uniform(0., 1.) < state.foodGenProb) {
+	state.foodGenStatus += state.foodGenRate;
+	while (state.foodGenStatus > 1) {
 		auto x = uniform(-FIELD_RAD, FIELD_RAD);
 		auto y = uniform(-FIELD_RAD, FIELD_RAD);
 		state.food ~= new Food(x, y);
+		state.foodGenStatus--;
 	}
 }
 

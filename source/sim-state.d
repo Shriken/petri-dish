@@ -13,7 +13,8 @@ class SimulationState {
 	Cell[] cells;
 	Food[] food;
 
-	double foodGenProb = 0.5;
+	double foodGenRate = 4;
+	double foodGenStatus = 0;
 
 	this() {
 		genome = new Genome();
