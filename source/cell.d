@@ -6,8 +6,8 @@ import genome;
 import render;
 import render_state;
 
-const double RAD_PER_FOOD = 0.5;
-const double BASE_RAD = 2;
+const double RAD_PER_FOOD = 1;
+const double BASE_RAD = 1;
 
 class Cell {
 	Vector!(double, 2) pos;
