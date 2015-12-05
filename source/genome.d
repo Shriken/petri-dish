@@ -18,6 +18,8 @@ class Genome {
 	this() {
 		foreach (i; 0 .. 16) {
 			cellModes ~= CellMode();
+			cellModes[$ - 1].child1Mode = to!byte(i);
+			cellModes[$ - 1].child2Mode = to!byte(i);
 		}
 	}
 };
@@ -39,18 +41,18 @@ struct CellMode {
 	CellType cellType;
 
 	bool makeAdhesin = false;
-	double nutrientPriority;
+	double nutrientPriority = 1;
 	double splitThreshold = 2.5;
 	double splitRatio = 1;
-	double splitAngle;
+	double splitAngle = 0;
 
-	double child1Rotation;
+	double child1Rotation = 0;
 	byte child1Mode; // 0 - 15
-	bool child1KeepAdhesin;
+	bool child1KeepAdhesin = true;
 
-	double child2Rotation;
+	double child2Rotation = 0;
 	byte child2Mode; // 0 - 15
-	bool child2KeepAdhesin;
+	bool child2KeepAdhesin = true;
 
 	Color color;
 };

@@ -28,11 +28,12 @@ class Cell {
 		this.genome = cell.genome;
 	}
 
-	this(double x, double y, CellMode *mode) {
-		this(Vector!(double, 2)(x, y), mode);
+	this(double x, double y, Genome genome, CellMode *mode) {
+		this(Vector!(double, 2)(x, y), genome, mode);
 	}
 
-	this(Vector!(double, 2) pos, CellMode *mode) {
+	this(Vector!(double, 2) pos, Genome genome, CellMode *mode) {
+		this.genome = genome;
 		this.mode = mode;
 		this.pos = pos;
 
@@ -49,21 +50,29 @@ class Cell {
 		);
 	}
 
+	Cell reproduce() {
+		foodLevel /= 2;
+
+		Cell newCell = new Cell(this);
+		newCell.vel.x += cos(angle + mode.splitAngle);
+		newCell.vel.y += sin(angle + mode.splitAngle);
+		newCell.angle = (angle + mode.splitAngle + mode.child2Rotation)
+			% 2 * PI;
+		newCell.mode = &genome.cellModes[mode.child2Mode];
+
+		vel.x -= cos(angle + mode.splitAngle);
+		vel.y -= sin(angle + mode.splitAngle);
+		angle = (angle + mode.splitAngle + mode.child1Rotation) % 2 * PI;
+		mode = &genome.cellModes[mode.child1Mode];
+
+		return newCell;
+	}
+
 	double rad() {
 		return BASE_RAD + foodLevel * RAD_PER_FOOD;
 	}
 
 	double foodConsumption() {
 		return 0.01;
-	}
-
-	Cell reproduce() {
-		this.foodLevel /= 2;
-
-		Cell newCell = new Cell(this);
-		newCell.vel.x += 1;
-		this.vel.x -= 1;
-
-		return newCell;
 	}
 };
