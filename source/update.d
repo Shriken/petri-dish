@@ -51,7 +51,8 @@ void update(SimulationState *state) {
 	}
 
 	for (int i = 0; i < state.food.length; i++) {
-		if (state.food[i].shouldDie) {
+		auto food = state.food[i];
+		if (food.shouldDie || food.age++ >= Food.MAX_AGE) {
 			state.food.remove(i--);
 			state.food.length--;
 		}

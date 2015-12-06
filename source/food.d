@@ -4,11 +4,13 @@ import render;
 import render_state;
 
 class Food {
+	static const int MAX_AGE = 60 * 10;
 	static double rad = 1;
 	static double amount = 1;
 
 	Vector!(double, 2) pos;
 	bool shouldDie = false;
+	int age = 0;
 
 	this(double x, double y) {
 		pos = Vector!(double, 2)(x, y);
