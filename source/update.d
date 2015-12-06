@@ -18,10 +18,23 @@ void update(SimulationState *state) {
 		updatePos(state, cell);
 	}
 
-	// TODO check for collision
-
-	// check for food consumption
 	foreach (ref Cell cell; parallel(state.cells)) {
+		// handle collisions
+		foreach (ref Cell otherCell; state.cells) {
+			// don't collide with yourself
+			if (&cell == &otherCell) {
+				continue;
+			}
+
+			auto posDiff = cell.pos - otherCell.pos;
+			auto radSum = cell.rad + otherCell.rad;
+			auto diffSquared = posDiff.squaredLength();
+			if (diffSquared < radSum ^^ 2) {
+				cell.vel += posDiff / diffSquared;
+			}
+		}
+
+		// handle food consumption
 		foreach (food; state.food) {
 			auto posDiff = cell.pos - food.pos;
 			auto radSum = cell.rad + food.rad;
