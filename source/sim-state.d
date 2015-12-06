@@ -1,6 +1,7 @@
 module sim_state;
 
 import std.random;
+import std.math;
 
 import cell;
 import food;
@@ -18,8 +19,9 @@ class SimulationState {
 
 	this() {
 		genome = new Genome();
-		genome.cellModes[0].splitAngle = 0.1;
+		genome.cellModes[0].splitAngle = PI / 2;
 
+		// spawn starter cells
 		foreach (int i; 0 .. 50) {
 			auto x = uniform(-FIELD_RAD, FIELD_RAD);
 			auto y = uniform(-FIELD_RAD, FIELD_RAD);

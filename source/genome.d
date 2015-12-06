@@ -38,7 +38,7 @@ enum CellType {
 };
 
 struct CellMode {
-	CellType cellType;
+	CellType cellType = CellType.phagocyte;
 
 	bool makeAdhesin = false;
 	double nutrientPriority = 1;

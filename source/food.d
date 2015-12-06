@@ -4,7 +4,7 @@ import render;
 import render_state;
 
 class Food {
-	static double rad = 3;
+	static double rad = 1;
 	static double amount = 1;
 
 	Vector!(double, 2) pos;

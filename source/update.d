@@ -6,7 +6,7 @@ import cell;
 import food;
 import sim_state;
 
-const double VISCOSITY = 1.01;
+const double VISCOSITY = 1.1;
 const double VISCOSITY_SLOWING_FACTOR = 1 / VISCOSITY;
 
 void update(SimulationState *state) {
