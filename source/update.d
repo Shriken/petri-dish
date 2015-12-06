@@ -25,7 +25,7 @@ void update(SimulationState *state) {
 			auto posDiff = cell.pos - food.pos;
 			auto radSum = cell.rad + food.rad;
 			if (posDiff.squaredLength() < radSum ^^ 2) {
-				cell.foodLevel += food.amount;
+				cell.gainMass(food.amount);
 				food.shouldDie = true;
 			}
 		}
@@ -37,7 +37,7 @@ void update(SimulationState *state) {
 		Cell *cell = &state.cells[i];
 		cell.foodLevel -= cell.foodConsumption();
 
-		if (cell.foodLevel <= 0) {
+		if (cell.foodLevel <= Cell.MIN_FOOD) {
 			state.cells.remove(i--);
 			state.cells.length--;
 		} else if (cell.foodLevel >= cell.mode.splitThreshold) {

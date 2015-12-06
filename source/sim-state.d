@@ -14,7 +14,7 @@ class SimulationState {
 	Cell[] cells;
 	Food[] food;
 
-	double foodGenRate = 4;
+	double foodGenRate = 2;
 	double foodGenStatus = 0;
 
 	this() {

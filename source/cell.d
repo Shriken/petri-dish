@@ -6,13 +6,14 @@ import genome;
 import render;
 import render_state;
 
-const double RAD_PER_FOOD = 1;
-const double BASE_RAD = 1;
-
 class Cell {
+	static const double RAD_PER_FOOD = 2;
+	static const double MIN_FOOD = 0.65;
+	static const double MAX_FOOD = 3.55;
+
 	Vector!(double, 2) pos;
 	Vector!(double, 2) vel;
-	double foodLevel = 8;
+	double foodLevel = 2;
 	double angle = 0;
 	CellMode *mode;
 	Genome genome;
@@ -68,11 +69,18 @@ class Cell {
 		return newCell;
 	}
 
+	void gainMass(double amount) {
+		foodLevel += amount;
+		if (foodLevel > Cell.MAX_FOOD) {
+			foodLevel = Cell.MAX_FOOD;
+		}
+	}
+
 	double rad() {
-		return BASE_RAD + foodLevel * RAD_PER_FOOD;
+		return foodLevel * Cell.RAD_PER_FOOD;
 	}
 
 	double foodConsumption() {
-		return 0.01;
+		return 0.003;
 	}
 };
