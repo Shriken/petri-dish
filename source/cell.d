@@ -7,13 +7,13 @@ import render;
 import render_state;
 
 class Cell {
-	static const double RAD_PER_FOOD = 2;
-	static const double MIN_FOOD = 0.65;
-	static const double MAX_FOOD = 3.55;
+	static const double RAD_PER_MASS = 2;
+	static const double MIN_MASS = 0.65;
+	static const double MAX_MASS = 3.55;
 
 	Vector!(double, 2) pos;
 	Vector!(double, 2) vel;
-	double foodLevel = 2;
+	double mass = 2;
 	double angle = 0;
 	CellMode *mode;
 	Genome genome;
@@ -23,7 +23,7 @@ class Cell {
 	this(Cell cell) {
 		this.pos = cell.pos;
 		this.vel = cell.vel;
-		this.foodLevel = cell.foodLevel;
+		this.mass = cell.mass;
 		this.angle = cell.angle;
 		this.mode = cell.mode;
 		this.genome = cell.genome;
@@ -37,9 +37,7 @@ class Cell {
 		this.genome = genome;
 		this.mode = mode;
 		this.pos = pos;
-
-		auto velAngle = uniform(0, 2 * PI);
-		vel = Vector!(double, 2)(cos(velAngle), sin(velAngle));
+		this.vel = Vector!(double, 2)(0, 0);
 	}
 
 	void render(RenderState *state) {
@@ -52,7 +50,7 @@ class Cell {
 	}
 
 	Cell reproduce() {
-		foodLevel /= 2;
+		mass /= 2;
 
 		Cell newCell = new Cell(this);
 		newCell.vel.x += cos(angle + mode.splitAngle);
@@ -70,17 +68,17 @@ class Cell {
 	}
 
 	void gainMass(double amount) {
-		foodLevel += amount;
-		if (foodLevel > Cell.MAX_FOOD) {
-			foodLevel = Cell.MAX_FOOD;
+		mass += amount;
+		if (mass > Cell.MAX_MASS) {
+			mass = Cell.MAX_MASS;
 		}
 	}
 
 	double rad() {
-		return foodLevel * Cell.RAD_PER_FOOD;
+		return mass * Cell.RAD_PER_MASS;
 	}
 
-	double foodConsumption() {
+	double massConsumption() {
 		return 0.003;
 	}
 };

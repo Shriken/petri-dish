@@ -21,7 +21,7 @@ void update(SimulationState *state) {
 
 	// check for food consumption
 	foreach (ref Cell cell; state.cells) {
-		foreach (i, food; state.food) {
+		foreach (food; state.food) {
 			auto posDiff = cell.pos - food.pos;
 			auto radSum = cell.rad + food.rad;
 			if (posDiff.squaredLength() < radSum ^^ 2) {
@@ -35,12 +35,12 @@ void update(SimulationState *state) {
 	for (int i = 0; i < state.cells.length; i++) {
 		// drain cells' energy
 		Cell *cell = &state.cells[i];
-		cell.foodLevel -= cell.foodConsumption();
+		cell.mass -= cell.massConsumption();
 
-		if (cell.foodLevel <= Cell.MIN_FOOD) {
+		if (cell.mass <= Cell.MIN_MASS) {
 			state.cells.remove(i--);
 			state.cells.length--;
-		} else if (cell.foodLevel >= cell.mode.splitThreshold) {
+		} else if (cell.mass >= cell.mode.splitThreshold) {
 			// if you have enough food, reproduce!
 			newCells ~= cell.reproduce();
 		}
