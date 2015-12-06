@@ -23,9 +23,15 @@ class SimulationState {
 
 		// spawn starter cells
 		foreach (int i; 0 .. 50) {
-			auto x = uniform(-FIELD_RAD, FIELD_RAD);
-			auto y = uniform(-FIELD_RAD, FIELD_RAD);
-			cells ~= new Cell(x, y, genome, &genome.cellModes[0]);
+			auto x = uniform(0, 2 * FIELD_RAD);
+			auto y = uniform(0, 2 * FIELD_RAD);
+			addCell(x, y);
 		}
+	}
+
+	void addCell(double x, double y) {
+		x -= FIELD_RAD;
+		y -= FIELD_RAD;
+		cells ~= new Cell(x, y, genome, &genome.cellModes[0]);
 	}
 };

@@ -12,6 +12,9 @@ void handleEvent(State *state, SDL_Event event) {
 		case SDL_KEYDOWN:
 			handleKey(state, event.key.keysym.sym);
 			break;
+		case SDL_MOUSEBUTTONDOWN:
+			handleClick(state, event.button);
+			break;
 		default:
 			break;
 	}
@@ -27,5 +30,11 @@ void handleKey(State *state, SDL_Keycode keycode) {
 			break;
 		default:
 			break;
+	}
+}
+
+void handleClick(State *state, SDL_MouseButtonEvent event) {
+	if (event.type == SDL_MOUSEBUTTONDOWN) {
+		state.simState.addCell(event.x, event.y);
 	}
 }
