@@ -1,6 +1,7 @@
 import std.stdio;
 import std.random;
 import std.algorithm;
+import std.parallelism;
 
 import cell;
 import food;
@@ -20,7 +21,7 @@ void update(SimulationState *state) {
 	// TODO check for collision
 
 	// check for food consumption
-	foreach (ref Cell cell; state.cells) {
+	foreach (ref Cell cell; parallel(state.cells)) {
 		foreach (food; state.food) {
 			auto posDiff = cell.pos - food.pos;
 			auto radSum = cell.rad + food.rad;
