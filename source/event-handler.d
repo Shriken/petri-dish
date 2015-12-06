@@ -35,6 +35,9 @@ void handleKey(State *state, SDL_Keycode keycode) {
 
 void handleClick(State *state, SDL_MouseButtonEvent event) {
 	if (event.type == SDL_MOUSEBUTTONDOWN) {
-		state.simState.addCell(event.x, event.y);
+		state.simState.addCell(
+			event.x - state.simState.FIELD_RAD,
+			event.y - state.simState.FIELD_RAD
+		);
 	}
 }
