@@ -18,6 +18,8 @@ class Cell {
 	CellMode *mode;
 	Genome genome;
 
+	Cell[] adhesedCells;
+
 	bool shouldDie = false;
 
 	@disable this();
@@ -29,6 +31,7 @@ class Cell {
 		this.angle = cell.angle;
 		this.mode = cell.mode;
 		this.genome = cell.genome;
+		this.adhesedCells = cell.adhesedCells.dup;
 	}
 
 	this(double x, double y, Genome genome, CellMode *mode) {
@@ -55,12 +58,6 @@ class Cell {
 	Cell reproduce() {
 		mass /= 2;
 
-		// child 1
-		vel.x += cos(angle + mode.splitAngle);
-		vel.y += sin(angle + mode.splitAngle);
-		angle = (angle + mode.splitAngle + mode.child1Rotation) % 2 * PI;
-		mode = &genome.cellModes[mode.child1Mode];
-
 		// child 2
 		Cell newCell = new Cell(this);
 		newCell.vel.x -= cos(angle + mode.splitAngle);
@@ -68,7 +65,23 @@ class Cell {
 		newCell.angle = (angle + mode.splitAngle + mode.child2Rotation)
 			% 2 * PI;
 		newCell.mode = &genome.cellModes[mode.child2Mode];
+		if (!mode.child2KeepAdhesin) {
+			newCell.adhesedCells.destroy();
+		}
 
+		// child 1
+		vel.x += cos(angle + mode.splitAngle);
+		vel.y += sin(angle + mode.splitAngle);
+		angle = (angle + mode.splitAngle + mode.child1Rotation) % 2 * PI;
+		mode = &genome.cellModes[mode.child1Mode];
+		if (!mode.child1KeepAdhesin) {
+			adhesedCells.destroy();
+		}
+
+		if (mode.makeAdhesin) {
+			adhesedCells ~= newCell;
+			newCell.adhesedCells ~= this;
+		}
 
 		return newCell;
 	}
