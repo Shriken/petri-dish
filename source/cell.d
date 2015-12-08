@@ -18,6 +18,8 @@ class Cell {
 	CellMode *mode;
 	Genome genome;
 
+	bool shouldDie = false;
+
 	@disable this();
 
 	this(Cell cell) {

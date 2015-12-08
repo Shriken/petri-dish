@@ -18,6 +18,7 @@ void update(SimulationState *state) {
 		updatePos(state, cell);
 	}
 
+	Cell[] newCells;
 	foreach (ref Cell cell; parallel(state.cells)) {
 		// handle collisions
 		foreach (ref Cell otherCell; state.cells) {
@@ -43,17 +44,11 @@ void update(SimulationState *state) {
 				food.shouldDie = true;
 			}
 		}
-	}
 
-	Cell[] newCells;
-	for (int i = 0; i < state.cells.length; i++) {
-		// drain cells' energy
-		Cell *cell = &state.cells[i];
 		cell.mass -= cell.massConsumption();
 
 		if (cell.mass <= Cell.MIN_MASS) {
-			state.cells[i] = state.cells[$ - 1];
-			state.cells.length--;
+			cell.shouldDie = true;
 		} else if (cell.mass >= cell.mode.splitThreshold) {
 			// if you have enough food, reproduce!
 			newCells ~= cell.reproduce();
@@ -64,11 +59,18 @@ void update(SimulationState *state) {
 		state.cells ~= cell;
 	}
 
+	// clean up dead food and cells
 	for (int i = 0; i < state.food.length; i++) {
 		auto food = state.food[i];
 		if (food.shouldDie || food.age++ >= Food.MAX_AGE) {
 			state.food[i] = state.food[$ - 1];
 			state.food.length--;
+		}
+	}
+	for (int i = 0; i < state.cells.length; i++) {
+		if (state.cells[i].shouldDie) {
+			state.cells[i] = state.cells[$ - 1];
+			state.cells.length--;
 		}
 	}
 
