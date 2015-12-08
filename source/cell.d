@@ -55,17 +55,20 @@ class Cell {
 	Cell reproduce() {
 		mass /= 2;
 
+		// child 1
+		vel.x += cos(angle + mode.splitAngle);
+		vel.y += sin(angle + mode.splitAngle);
+		angle = (angle + mode.splitAngle + mode.child1Rotation) % 2 * PI;
+		mode = &genome.cellModes[mode.child1Mode];
+
+		// child 2
 		Cell newCell = new Cell(this);
-		newCell.vel.x += cos(angle + mode.splitAngle);
-		newCell.vel.y += sin(angle + mode.splitAngle);
+		newCell.vel.x -= cos(angle + mode.splitAngle);
+		newCell.vel.y -= sin(angle + mode.splitAngle);
 		newCell.angle = (angle + mode.splitAngle + mode.child2Rotation)
 			% 2 * PI;
 		newCell.mode = &genome.cellModes[mode.child2Mode];
 
-		vel.x -= cos(angle + mode.splitAngle);
-		vel.y -= sin(angle + mode.splitAngle);
-		angle = (angle + mode.splitAngle + mode.child1Rotation) % 2 * PI;
-		mode = &genome.cellModes[mode.child1Mode];
 
 		return newCell;
 	}
