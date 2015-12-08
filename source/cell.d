@@ -1,5 +1,7 @@
 import std.math;
+import std.stdio;
 import std.random;
+import std.algorithm;
 import gfm.math.vector;
 
 import genome;
@@ -67,34 +69,56 @@ class Cell {
 	Cell reproduce() {
 		mass /= 2;
 
-		auto makeAdhesin = mode.makeAdhesin;
+		auto oldMode = mode;
 
 		// child 2
 		Cell newCell = new Cell(this);
-		newCell.vel.x -= cos(angle + mode.splitAngle);
-		newCell.vel.y -= sin(angle + mode.splitAngle);
-		newCell.angle = (angle + mode.splitAngle + mode.child2Rotation)
-			% 2 * PI;
-		newCell.mode = &genome.cellModes[mode.child2Mode];
-		if (!mode.child2KeepAdhesin) {
+		newCell.vel.x -= cos(angle + oldMode.splitAngle);
+		newCell.vel.y -= sin(angle + oldMode.splitAngle);
+		newCell.angle = (
+			angle + oldMode.splitAngle + oldMode.child2Rotation
+		) % 2 * PI;
+		newCell.mode = &genome.cellModes[oldMode.child2Mode];
+		if (oldMode.child2KeepAdhesin) {
+			foreach (cell; newCell.adhesedCells) {
+				cell.adhesedCells ~= newCell;
+			}
+		} else {
 			newCell.adhesedCells.destroy();
 		}
 
 		// child 1
-		vel.x += cos(angle + mode.splitAngle);
-		vel.y += sin(angle + mode.splitAngle);
-		angle = (angle + mode.splitAngle + mode.child1Rotation) % 2 * PI;
-		mode = &genome.cellModes[mode.child1Mode];
-		if (!mode.child1KeepAdhesin) {
+		vel.x += cos(angle + oldMode.splitAngle);
+		vel.y += sin(angle + oldMode.splitAngle);
+		angle = (
+			angle + oldMode.splitAngle + oldMode.child1Rotation
+		) % 2 * PI;
+		mode = &genome.cellModes[oldMode.child1Mode];
+		if (!oldMode.child1KeepAdhesin) {
+			foreach (cell; adhesedCells) {
+				cell.unadheseWith(this);
+			}
 			adhesedCells.destroy();
 		}
 
-		if (makeAdhesin) {
+		if (oldMode.makeAdhesin) {
 			adhesedCells ~= newCell;
 			newCell.adhesedCells ~= this;
 		}
 
 		return newCell;
+	}
+
+	void die() {
+		foreach (cell; adhesedCells) {
+			cell.unadheseWith(this);
+		}
+		adhesedCells.destroy();
+	}
+
+	void unadheseWith(Cell cell) {
+		auto index = adhesedCells.countUntil(cell);
+		adhesedCells.remove(index);
 	}
 
 	void gainMass(double amount) {

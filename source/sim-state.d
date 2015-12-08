@@ -5,6 +5,7 @@ import std.math;
 
 import cell;
 import food;
+import misc.color;
 import genome;
 
 class SimulationState {
@@ -22,12 +23,15 @@ class SimulationState {
 		genome.cellModes[0].makeAdhesin = true;
 		genome.cellModes[0].child1Mode = 1;
 		genome.cellModes[0].child2Mode = 2;
+		genome.cellModes[0].color = Color(0xff, 0, 0);
 
 		genome.cellModes[1].splitAngle = PI / 2;
 		genome.cellModes[1].child1Mode = 0;
 		genome.cellModes[1].child1KeepAdhesin = false;
+		genome.cellModes[1].color = Color(0, 0xff, 0);
 
 		genome.cellModes[2].cellType = CellType.flagellocyte;
+		genome.cellModes[2].color = Color(0xff, 0xff, 0xff);
 
 		// spawn starter cells
 		foreach (int i; 0 .. 50) {

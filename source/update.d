@@ -64,6 +64,7 @@ void update(SimulationState *state) {
 	}
 	for (int i = 0; i < state.cells.length; i++) {
 		if (state.cells[i].shouldDie) {
+			state.cells[i].die();
 			state.cells[i] = state.cells[$ - 1];
 			state.cells.length--;
 		}
