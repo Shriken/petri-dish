@@ -86,9 +86,6 @@ void updatePos(SimulationState *state, ref Cell cell) {
 	// update position
 	cell.pos += cell.vel;
 
-	// simulate viscosity
-	cell.vel *= VISCOSITY_SLOWING_FACTOR;
-
 	// constrain cell to field bounds
 	if (pos.x < -FIELD_RAD) {
 		pos.x = -pos.x - 2 * FIELD_RAD;
@@ -104,6 +101,18 @@ void updatePos(SimulationState *state, ref Cell cell) {
 	} else if (pos.y > FIELD_RAD) {
 		pos.y = 2 * FIELD_RAD - pos.y;
 		cell.vel.y *= -1;
+	}
+
+	// simulate viscosity
+	cell.vel *= VISCOSITY_SLOWING_FACTOR;
+
+	foreach (adhesedCell; cell.adhesedCells) {
+		auto posDiff = adhesedCell.pos - cell.pos;
+		auto radSum = cell.rad + adhesedCell.rad;
+		auto squaredDist = posDiff.squaredLength;
+		if (squaredDist > radSum ^^ 2) {
+			cell.vel += posDiff * 0.03;
+		}
 	}
 }
 

@@ -43,6 +43,24 @@ void drawRect(
 	SDL_RenderFillRect(state.renderer, &rect);
 }
 
+void drawLine(
+	RenderState *state,
+	Vector!(double, 2) point1,
+	Vector!(double, 2) point2,
+	ubyte r,
+	ubyte g,
+	ubyte b,
+	ubyte a,
+) {
+	int x1 = cast(int)point1.x + state.windowWidth  / 2;
+	int y1 = cast(int)point1.y + state.windowHeight / 2;
+	int x2 = cast(int)point2.x + state.windowWidth  / 2;
+	int y2 = cast(int)point2.y + state.windowHeight / 2;
+
+	SDL_SetRenderDrawColor(state.renderer, r, g, b, a);
+	SDL_RenderDrawLine(state.renderer, x1, y1, x2, y2);
+}
+
 bool initRenderer(RenderState *state) {
 	DerelictSDL2.load();
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {

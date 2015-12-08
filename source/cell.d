@@ -53,10 +53,21 @@ class Cell {
 			Vector!(double, 2)(rad * 2, rad * 2),
 			mode.color.r, mode.color.g, mode.color.b, 0xff
 		);
+
+		// draw adhesin bonds
+		foreach (cell; adhesedCells) {
+			state.drawLine(
+				pos,
+				cell.pos,
+				0xff, 0xff, 0xff, 0xff
+			);
+		}
 	}
 
 	Cell reproduce() {
 		mass /= 2;
+
+		auto makeAdhesin = mode.makeAdhesin;
 
 		// child 2
 		Cell newCell = new Cell(this);
@@ -78,7 +89,7 @@ class Cell {
 			adhesedCells.destroy();
 		}
 
-		if (mode.makeAdhesin) {
+		if (makeAdhesin) {
 			adhesedCells ~= newCell;
 			newCell.adhesedCells ~= this;
 		}
