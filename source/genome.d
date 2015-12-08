@@ -2,6 +2,7 @@ module genome;
 
 import std.conv;
 import std.stdio;
+import std.random;
 import std.string;
 import std.algorithm;
 
@@ -20,6 +21,11 @@ class Genome {
 			cellModes ~= CellMode();
 			cellModes[$ - 1].child1Mode = to!byte(i);
 			cellModes[$ - 1].child2Mode = to!byte(i);
+			cellModes[$ - 1].color = Color(
+				cast(byte)uniform(0, 255),
+				cast(byte)uniform(0, 255),
+				cast(byte)uniform(0, 255)
+			);
 		}
 	}
 };

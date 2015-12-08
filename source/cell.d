@@ -51,7 +51,7 @@ class Cell {
 		state.drawRect(
 			pos - Vector!(double, 2)(rad, rad),
 			Vector!(double, 2)(rad * 2, rad * 2),
-			0xff, 0, 0, 0xff
+			mode.color.r, mode.color.g, mode.color.b, 0xff
 		);
 	}
 
