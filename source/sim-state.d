@@ -26,6 +26,7 @@ class SimulationState {
 			auto x = uniform(-FIELD_RAD, FIELD_RAD);
 			auto y = uniform(-FIELD_RAD, FIELD_RAD);
 			addCell(x, y);
+			cells[$ - 1].mode.cellType = CellType.flagellocyte;
 		}
 	}
 

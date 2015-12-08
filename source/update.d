@@ -1,3 +1,4 @@
+import std.math;
 import std.stdio;
 import std.random;
 import std.algorithm;
@@ -5,6 +6,7 @@ import std.parallelism;
 
 import cell;
 import food;
+import genome;
 import sim_state;
 
 const double VISCOSITY = 1.1;
@@ -35,15 +37,8 @@ void update(SimulationState *state) {
 			}
 		}
 
-		// handle food consumption
-		foreach (food; state.food) {
-			auto posDiff = cell.pos - food.pos;
-			auto radSum = cell.rad + food.rad;
-			if (posDiff.squaredLength() < radSum ^^ 2) {
-				cell.gainMass(food.amount);
-				food.shouldDie = true;
-			}
-		}
+		// handle cell's special ability
+		handleSpecialAbility(state, cell);
 
 		cell.mass -= cell.massConsumption();
 
@@ -109,5 +104,43 @@ void updatePos(SimulationState *state, ref Cell cell) {
 	} else if (pos.y > FIELD_RAD) {
 		pos.y = 2 * FIELD_RAD - pos.y;
 		cell.vel.y *= -1;
+	}
+}
+
+void handleSpecialAbility(SimulationState *state, Cell cell) {
+	final switch (cell.mode.cellType) {
+		case CellType.phagocyte:
+			// consume nearby food
+			foreach (food; state.food) {
+				auto posDiff = cell.pos - food.pos;
+				auto radSum = cell.rad + food.rad;
+				if (posDiff.squaredLength() < radSum ^^ 2) {
+					cell.gainMass(food.amount);
+					food.shouldDie = true;
+				}
+			}
+			break;
+
+		case CellType.flagellocyte:
+			cell.vel.x += 0.1 * cos(cell.angle);
+			cell.vel.y += 0.1 * sin(cell.angle);
+			break;
+
+		case CellType.photocyte:
+			break;
+		case CellType.devorocyte:
+			break;
+		case CellType.lipocyte:
+			break;
+		case CellType.keratinocyte:
+			break;
+		case CellType.buoyocyte:
+			break;
+		case CellType.glueocyte:
+			break;
+		case CellType.virocyte:
+			break;
+		case CellType.nitrocyte:
+			break;
 	}
 }

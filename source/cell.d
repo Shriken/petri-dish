@@ -40,6 +40,7 @@ class Cell {
 		this.mode = mode;
 		this.pos = pos;
 		this.vel = Vector!(double, 2)(0, 0);
+		this.angle = uniform(0, 2 * PI);
 	}
 
 	void render(RenderState *state) {
