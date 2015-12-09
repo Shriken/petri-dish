@@ -50,23 +50,19 @@ void update(SimulationState *state) {
 		}
 	}
 
-	foreach (ref Cell cell; newCells) {
-		state.cells ~= cell;
-	}
+	state.cells ~= newCells;
 
 	// clean up dead food and cells
 	for (int i = 0; i < state.food.length; i++) {
 		auto food = state.food[i];
 		if (food.shouldDie || food.age++ >= Food.MAX_AGE) {
-			state.food[i] = state.food[$ - 1];
-			state.food.length--;
+			state.food = state.food.remove!(SwapStrategy.unstable)(i--);
 		}
 	}
 	for (int i = 0; i < state.cells.length; i++) {
 		if (state.cells[i].shouldDie) {
 			state.cells[i].die();
-			state.cells[i] = state.cells[$ - 1];
-			state.cells.length--;
+			state.cells = state.cells.remove!(SwapStrategy.unstable)(i--);
 		}
 	}
 

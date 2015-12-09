@@ -118,7 +118,7 @@ class Cell {
 
 	void unadheseWith(Cell cell) {
 		auto index = adhesedCells.countUntil(cell);
-		adhesedCells.remove(index);
+		adhesedCells = adhesedCells.remove!(SwapStrategy.unstable)(index);
 	}
 
 	void gainMass(double amount) {
