@@ -32,6 +32,7 @@ class SimulationState {
 
 		genome.cellModes[2].cellType = CellType.flagellocyte;
 		genome.cellModes[2].color = Color(0xff, 0xff, 0xff);
+		genome.cellModes[2].splitThreshold = 100;
 
 		// spawn starter cells
 		foreach (int i; 0 .. 50) {

@@ -1,4 +1,5 @@
 import std.math;
+import std.range;
 import std.stdio;
 import std.random;
 import std.algorithm;
@@ -79,11 +80,16 @@ class Cell {
 			angle + oldMode.splitAngle + oldMode.child2Rotation
 		) % 2 * PI;
 		newCell.mode = &genome.cellModes[oldMode.child2Mode];
+
 		if (oldMode.child2KeepAdhesin) {
 			foreach (cell; newCell.adhesedCells) {
+				assert(cell.adhesedCells.find(newCell).empty);
 				cell.adhesedCells ~= newCell;
 			}
 		} else {
+			foreach (cell; newCell.adhesedCells) {
+				assert(cell.adhesedCells.find(newCell).empty);
+			}
 			newCell.adhesedCells.destroy();
 		}
 
@@ -97,6 +103,7 @@ class Cell {
 		if (!oldMode.child1KeepAdhesin) {
 			foreach (cell; adhesedCells) {
 				cell.unadheseWith(this);
+				assert(cell.adhesedCells.find(this).empty);
 			}
 			adhesedCells.destroy();
 		}
