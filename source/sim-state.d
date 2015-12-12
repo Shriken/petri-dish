@@ -21,6 +21,7 @@ class SimulationState {
 	this() {
 		genome = new Genome();
 		genome.cellModes[0].makeAdhesin = true;
+		genome.cellModes[0].splitThreshold = 1.8;
 		genome.cellModes[0].child1Mode = 1;
 		genome.cellModes[0].child2Mode = 2;
 		genome.cellModes[0].color = Color(0xff, 0, 0);
