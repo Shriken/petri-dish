@@ -12,6 +12,9 @@ import sim_state;
 const double VISCOSITY = 1.1;
 const double VISCOSITY_SLOWING_FACTOR = 1 / VISCOSITY;
 
+// rate of mass flow through adhesin
+const double MASS_FLOW_RATE = 0.04;
+
 void update(SimulationState *state) {
 	auto FIELD_RAD = state.FIELD_RAD;
 
@@ -40,14 +43,30 @@ void update(SimulationState *state) {
 		// handle cell's special ability
 		handleSpecialAbility(state, cell);
 
-		cell.mass -= cell.massConsumption();
-
 		if (cell.mass <= Cell.MIN_MASS) {
+			// starve
 			cell.shouldDie = true;
 		} else if (cell.mass >= cell.mode.splitThreshold) {
-			// if you have enough food, reproduce!
+			// reproduce
 			newCells ~= cell.reproduce();
 		}
+
+		// consume mass through existence
+		cell.massChange -= cell.massConsumption();
+
+		// move mass around between adhesed cells
+		foreach (ref Cell adhesedCell; cell.adhesedCells) {
+			auto deltaMass = adhesedCell.mass - cell.mass;
+			deltaMass = min(MASS_FLOW_RATE, deltaMass);
+			deltaMass = max(-MASS_FLOW_RATE, deltaMass);
+			cell.massChange += deltaMass;
+		}
+	}
+
+	foreach (cell; parallel(state.cells)) {
+		// update mass
+		cell.mass += cell.massChange;
+		cell.massChange = 0;
 	}
 
 	state.cells ~= newCells;
@@ -121,7 +140,7 @@ void handleSpecialAbility(SimulationState *state, Cell cell) {
 				auto posDiff = cell.pos - food.pos;
 				auto radSum = cell.rad + food.rad;
 				if (posDiff.squaredLength() < radSum ^^ 2) {
-					cell.gainMass(food.amount);
+					cell.massChange += food.amount;
 					food.shouldDie = true;
 				}
 			}

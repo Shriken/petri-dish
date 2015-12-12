@@ -23,7 +23,9 @@ class Cell {
 
 	Cell[] adhesedCells;
 
+	// state variables for use in update
 	bool shouldDie = false;
+	double massChange = 0;
 
 	@disable this();
 
@@ -68,7 +70,7 @@ class Cell {
 	}
 
 	Cell reproduce() {
-		mass /= 2;
+		massChange -= mass / 2;
 
 		auto oldMode = mode;
 
@@ -80,6 +82,7 @@ class Cell {
 			angle + oldMode.splitAngle + oldMode.child2Rotation
 		) % 2 * PI;
 		newCell.mode = &genome.cellModes[oldMode.child2Mode];
+		newCell.mass /= 2;
 
 		if (oldMode.child2KeepAdhesin) {
 			foreach (cell; newCell.adhesedCells) {
