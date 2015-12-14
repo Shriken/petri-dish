@@ -93,7 +93,7 @@ void print(File file, Genome genome) {
 	}
 }
 
-Genome read(ref Genome genome, string filename) {
+Genome load(ref Genome genome, string filename) {
 	genome.cellModes.destroy();
 	auto file = File(filename, "r");
 
