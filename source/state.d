@@ -5,6 +5,7 @@ class State {
 	SimulationState simState;
 	RenderState renderState;
 	bool paused = false;
+	double fps;
 
 	this() {
 		this.simState = new SimulationState();

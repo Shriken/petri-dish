@@ -1,6 +1,8 @@
+import std.conv;
 import std.stdio;
 import gfm.math.vector;
 import derelict.sdl2.sdl;
+import derelict.sdl2.ttf;
 
 import cell;
 import food;
@@ -8,20 +10,65 @@ import state;
 import render_state;
 
 void render(State *state) {
+	auto renderState = &state.renderState;
+
 	// clear screen
-	RenderState *renderState = &state.renderState;
 	SDL_SetRenderDrawColor(renderState.renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderState.renderer);
 
+	// render cells
 	foreach (ref Cell cell; state.simState.cells) {
 		cell.render(renderState);
 	}
 
+	// render food
 	foreach (ref Food food; state.simState.food) {
 		food.render(renderState);
 	}
 
+	// render debug stuffs
+	if (renderState.debugRender) {
+		renderDebug(state);
+	}
+
 	SDL_RenderPresent(renderState.renderer);
+}
+
+void renderDebug(State *state) {
+	// draw fps in top left
+	auto fpsText = to!(char[])(state.fps);
+	fpsText ~= '\0';
+	drawText(state.renderState, fpsText, 0, 0);
+}
+
+void drawText(RenderState state, char[] text, int x, int y) {
+	auto color = SDL_Color(255, 255, 255, 255);
+	auto textSurface = TTF_RenderText_Solid(
+		state.debugTextFont,
+		text.ptr,
+		color
+	);
+	if (textSurface is null) {
+		writeln(to!string(SDL_GetError()));
+		return;
+	}
+
+	auto textTexture = SDL_CreateTextureFromSurface(
+		state.renderer,
+		textSurface
+	);
+	if (textTexture is null) {
+		writeln(to!string(SDL_GetError()));
+		return;
+	}
+
+	SDL_Rect targetLoc;
+	targetLoc.x = x;
+	targetLoc.y = y;
+	targetLoc.w = textSurface.w;
+	targetLoc.h = textSurface.h;
+	SDL_RenderCopy(state.renderer, textTexture, null, &targetLoc);
+	SDL_FreeSurface(textSurface);
 }
 
 void drawRect(
@@ -63,6 +110,7 @@ void drawLine(
 
 bool initRenderer(RenderState *state) {
 	DerelictSDL2.load();
+
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		writeln("failed to init sdl video");
 		return false;
@@ -77,11 +125,24 @@ bool initRenderer(RenderState *state) {
 		SDL_WINDOW_SHOWN
 	);
 
-	if (state.window == null) {
+	if (state.window is null) {
 		return false;
 	}
 
 	state.renderer = SDL_CreateRenderer(state.window, -1, 0);
+
+	DerelictSDL2ttf.load();
+
+	if (TTF_Init() != 0) {
+		writeln("failed to init ttf");
+		return false;
+	}
+
+	state.debugTextFont = TTF_OpenFont("res/monaco.ttf", 10);
+	if (state.debugTextFont is null) {
+		writeln("font not present");
+		return false;
+	}
 
 	return true;
 }

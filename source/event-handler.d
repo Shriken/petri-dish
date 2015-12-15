@@ -28,6 +28,9 @@ void handleKey(State *state, SDL_Keycode keycode) {
 		case SDLK_p:
 			state.paused = !state.paused;
 			break;
+		case SDLK_d:
+			state.renderState.debugRender = !state.renderState.debugRender;
+			break;
 		default:
 			break;
 	}
