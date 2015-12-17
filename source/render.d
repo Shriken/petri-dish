@@ -13,7 +13,7 @@ void render(State *state) {
 	auto renderState = &state.renderState;
 
 	// clear screen
-	SDL_SetRenderDrawColor(renderState.renderer, 0, 0, 0, 255);
+	SDL_SetRenderDrawColor(renderState.renderer, 0, 0, 0, 0xff);
 	SDL_RenderClear(renderState.renderer);
 
 	// render cells
@@ -42,7 +42,7 @@ void renderDebug(State *state) {
 }
 
 void drawText(RenderState state, char[] text, int x, int y) {
-	auto color = SDL_Color(255, 255, 255, 255);
+	auto color = SDL_Color(0xff, 0xff, 0xff, 0xff);
 	auto textSurface = TTF_RenderText_Solid(
 		state.debugTextFont,
 		text.ptr,
