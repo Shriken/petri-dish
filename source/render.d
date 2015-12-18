@@ -8,6 +8,7 @@ import cell;
 import food;
 import state;
 import render_state;
+import misc.transforms;
 
 void render(State *state) {
 	auto renderState = &state.renderState;
@@ -73,21 +74,20 @@ void drawText(RenderState state, char[] text, int x, int y) {
 
 void drawRect(
 	RenderState *state,
-	Vector!(double, 2) topLeft,
-	Vector!(double, 2) dimensions,
+	vec2d topLeft,
+	vec2d dimensions,
 	ubyte r,
 	ubyte g,
 	ubyte b,
 	ubyte a,
 ) {
-	SDL_Rect rect;
-	rect.x = cast(int)topLeft.x + state.windowWidth  / 2;
-	rect.y = cast(int)topLeft.y + state.windowHeight / 2;
-	rect.w = cast(int)dimensions.x;
-	rect.h = cast(int)dimensions.y;
-
+	auto renderTopLeft = (*state).worldToRenderCoords(topLeft);
+	auto drawRect = getRectFromVectors(
+		renderTopLeft,
+		renderTopLeft + dimensions
+	);
 	SDL_SetRenderDrawColor(state.renderer, r, g, b, a);
-	SDL_RenderFillRect(state.renderer, &rect);
+	SDL_RenderFillRect(state.renderer, &drawRect);
 }
 
 void drawLine(
@@ -99,51 +99,58 @@ void drawLine(
 	ubyte b,
 	ubyte a,
 ) {
-	int x1 = cast(int)point1.x + state.windowWidth  / 2;
-	int y1 = cast(int)point1.y + state.windowHeight / 2;
-	int x2 = cast(int)point2.x + state.windowWidth  / 2;
-	int y2 = cast(int)point2.y + state.windowHeight / 2;
+	point1 = (*state).worldToRenderCoords(point1);
+	point2 = (*state).worldToRenderCoords(point2);
 
 	SDL_SetRenderDrawColor(state.renderer, r, g, b, a);
-	SDL_RenderDrawLine(state.renderer, x1, y1, x2, y2);
+	SDL_RenderDrawLine(
+		state.renderer,
+		cast(int)point1.x,
+		cast(int)point1.y,
+		cast(int)point2.x,
+		cast(int)point2.y
+	);
 }
 
 bool initRenderer(RenderState *state) {
+	// set up SDL
 	DerelictSDL2.load();
-
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		writeln("failed to init sdl video");
 		return false;
 	}
 
+	// create the game window
 	state.window = SDL_CreateWindow(
 		"Petri dish",
 		SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED,
-		state.windowWidth,
-		state.windowHeight,
+		state.windowDimensions.x,
+		state.windowDimensions.y,
 		SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI
 	);
-
-	int x, y;
-	SDL_GL_GetDrawableSize(state.window, &x, &y);
-	state.scale.x = 1. * x / state.windowWidth;
-	state.scale.y = 1. * y / state.windowHeight;
-
 	if (state.window is null) {
 		return false;
 	}
 
+	// determine the scale we're working at
+	int x, y;
+	SDL_GL_GetDrawableSize(state.window, &x, &y);
+	state.scale.x = 1. * x / state.windowDimensions.x;
+	state.scale.y = 1. * y / state.windowDimensions.y;
+
+	// initialize the renderer
 	state.renderer = SDL_CreateRenderer(state.window, -1, 0);
 	SDL_RenderSetScale(state.renderer, state.scale.x, state.scale.y);
 
+	// set up sdl_ttf
 	DerelictSDL2ttf.load();
-
 	if (TTF_Init() != 0) {
 		writeln("failed to init ttf");
 		return false;
 	}
 
+	// load the font
 	state.debugTextFont = TTF_OpenFont("res/monaco.ttf", 10);
 	if (state.debugTextFont is null) {
 		writeln("font not present");
@@ -154,6 +161,7 @@ bool initRenderer(RenderState *state) {
 }
 
 void cleanupRenderer(RenderState *state) {
+	SDL_DestroyRenderer(state.renderer);
 	SDL_DestroyWindow(state.window);
 	SDL_Quit();
 }
