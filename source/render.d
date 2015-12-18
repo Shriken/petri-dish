@@ -16,14 +16,14 @@ void render(State *state) {
 	SDL_SetRenderDrawColor(renderState.renderer, 0, 0, 0, 0xff);
 	SDL_RenderClear(renderState.renderer);
 
-	// render cells
-	foreach (ref Cell cell; state.simState.cells) {
-		cell.render(renderState);
-	}
-
 	// render food
 	foreach (ref Food food; state.simState.food) {
 		food.render(renderState);
+	}
+
+	// render cells
+	foreach (ref Cell cell; state.simState.cells) {
+		cell.render(renderState);
 	}
 
 	// render debug stuffs
@@ -122,14 +122,20 @@ bool initRenderer(RenderState *state) {
 		SDL_WINDOWPOS_UNDEFINED,
 		state.windowWidth,
 		state.windowHeight,
-		SDL_WINDOW_SHOWN
+		SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI
 	);
+
+	int x, y;
+	SDL_GL_GetDrawableSize(state.window, &x, &y);
+	state.scale.x = 1. * x / state.windowWidth;
+	state.scale.y = 1. * y / state.windowHeight;
 
 	if (state.window is null) {
 		return false;
 	}
 
 	state.renderer = SDL_CreateRenderer(state.window, -1, 0);
+	SDL_RenderSetScale(state.renderer, state.scale.x, state.scale.y);
 
 	DerelictSDL2ttf.load();
 
