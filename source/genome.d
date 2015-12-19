@@ -122,10 +122,10 @@ Genome load(ref Genome genome, string filename) {
 		file.readf(" child2KeepAdhesin: %s", &mode.child2KeepAdhesin);
 
 		file.readf(
-			" color: SDL_Color(%s, %s, %s)",
+			" color: SDL_Color(%s, %s, %s, 0)",
 			&mode.color.r,
 			&mode.color.g,
-			&mode.color.b
+			&mode.color.b,
 		);
 		genome.cellModes ~= mode;
 	}
