@@ -14,6 +14,7 @@ class Cell {
 	static const double RAD_PER_MASS = 2;
 	static const double MIN_MASS = 0.65;
 	static const double MAX_MASS = 3.55;
+	static const double DEVOROCYTE_CONSUMPTION_RATE = 0.3;
 
 	Vector!(double, 2) pos;
 	Vector!(double, 2) vel;
@@ -150,11 +151,18 @@ class Cell {
 	}
 
 	void collide(Cell otherCell) {
+		// check and handle actual collisions
 		auto posDiff = pos - otherCell.pos;
 		auto radSum = rad + otherCell.rad;
 		auto diffSquared = posDiff.squaredLength();
 		if (diffSquared < radSum ^^ 2) {
 			vel += posDiff / diffSquared;
+		}
+
+		if (mode.cellType is CellType.devorocyte) {
+			// eat other cell
+			massChange += DEVOROCYTE_CONSUMPTION_RATE;
+			otherCell.massChange -= DEVOROCYTE_CONSUMPTION_RATE;
 		}
 	}
 };

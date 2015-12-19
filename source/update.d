@@ -146,8 +146,12 @@ void handleSpecialAbility(SimulationState state, Cell cell) {
 
 		case CellType.photocyte:
 			break;
+
 		case CellType.devorocyte:
+			// consume nearby cells
+			// functionality in Cell.collide()
 			break;
+
 		case CellType.lipocyte:
 			break;
 		case CellType.keratinocyte:
