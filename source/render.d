@@ -5,13 +5,13 @@ import gfm.math.vector;
 import derelict.sdl2.sdl;
 import derelict.sdl2.ttf;
 
-import cell;
-import food;
-import state;
-import sdl_utils;
-import render_state;
+import consts;
+import misc.sdl_utils;
 import misc.transforms;
-import misc.path_consts;
+import actor.cell;
+import actor.food;
+import state.state;
+import state.render_state;
 
 void render(State state) {
 	auto renderState = state.renderState;

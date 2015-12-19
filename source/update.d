@@ -4,10 +4,10 @@ import std.random;
 import std.algorithm;
 import std.parallelism;
 
-import cell;
-import food;
 import genome;
-import sim_state;
+import state.sim_state;
+import actor.cell;
+import actor.food;
 
 const double VISCOSITY = 1.1;
 const double VISCOSITY_SLOWING_FACTOR = 1 / VISCOSITY;

@@ -1,5 +1,7 @@
-import sim_state;
-import render_state;
+module state.state;
+
+import state.sim_state;
+import state.render_state;
 
 class State {
 	SimulationState simState;

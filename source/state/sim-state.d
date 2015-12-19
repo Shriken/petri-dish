@@ -1,14 +1,14 @@
-module sim_state;
+module state.sim_state;
 
 import std.math;
 import std.path;
 import std.random;
 import derelict.sdl2.sdl;
 
-import cell;
-import food;
+import consts;
 import genome;
-import misc.path_consts;
+import actor.cell;
+import actor.food;
 
 class SimulationState {
 	bool running = true;

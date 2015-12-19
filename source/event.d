@@ -1,8 +1,8 @@
-module event_handler;
+module event;
 
 import derelict.sdl2.sdl;
 
-import state;
+import state.state;
 
 void handleEvent(State state, SDL_Event event) {
 	switch (event.type) {

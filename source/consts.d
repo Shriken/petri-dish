@@ -1,4 +1,4 @@
-module misc.path_consts;
+module consts;
 
 import std.path;
 

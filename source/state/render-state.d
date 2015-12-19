@@ -1,4 +1,4 @@
-module render_state;
+module state.render_state;
 
 import gfm.math.vector;
 import derelict.sdl2.sdl;

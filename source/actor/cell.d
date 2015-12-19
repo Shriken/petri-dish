@@ -1,3 +1,5 @@
+module actor.cell;
+
 import std.math;
 import std.range;
 import std.stdio;
@@ -8,7 +10,7 @@ import derelict.sdl2.sdl;
 
 import genome;
 import render;
-import render_state;
+import state.render_state;
 
 class Cell {
 	static const double RAD_PER_MASS = 2;

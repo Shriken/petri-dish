@@ -1,4 +1,4 @@
-module sdl_utils;
+module misc.sdl_utils;
 
 import derelict.sdl2.sdl;
 

@@ -6,11 +6,11 @@ import std.algorithm;
 import core.thread;
 import derelict.sdl2.sdl;
 
-import state;
+import event;
+import consts;
 import render;
 import update;
-import event_handler;
-import misc.path_consts;
+import state.state;
 
 const int TICKS_PER_SECOND = 60;
 const int MICROS_PER_SECOND = 1_000_000;
