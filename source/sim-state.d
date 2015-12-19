@@ -19,8 +19,7 @@ class SimulationState {
 	double foodGenStatus = 0;
 
 	this() {
-		genome = new Genome();
-		genome.load("simple-swimmers.gnm");
+		genome = Genome.load("simple-swimmers.gnm");
 
 		// spawn starter cells
 		foreach (int i; 0 .. 50) {

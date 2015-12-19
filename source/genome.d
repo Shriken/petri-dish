@@ -30,6 +30,45 @@ class Genome {
 			);
 		}
 	}
+
+	static Genome load(string filename) {
+		auto genome = new Genome();
+		genome.cellModes.destroy();
+		auto file = File(filename, "r");
+
+		int length;
+		file.readf("numModes: %s", &length);
+		foreach (i; 0 .. length) {
+			CellMode mode;
+			string cellType;
+			file.readf(" cellType: %s\n", &cellType);
+			mode.cellType = to!CellType(cellType);
+
+			file.readf(" makeAdhesin: %s", &mode.makeAdhesin);
+			file.readf(" nutrientPriority: %s", &mode.nutrientPriority);
+			file.readf(" splitThreshold: %s", &mode.splitThreshold);
+			file.readf(" splitRatio: %s", &mode.splitRatio);
+			file.readf(" splitAngle: %s", &mode.splitAngle);
+
+			file.readf(" child1Rotation: %s", &mode.child1Rotation);
+			file.readf(" child1Mode: %s", &mode.child1Mode);
+			file.readf(" child1KeepAdhesin: %s", &mode.child1KeepAdhesin);
+
+			file.readf(" child2Rotation: %s", &mode.child2Rotation);
+			file.readf(" child2Mode: %s", &mode.child2Mode);
+			file.readf(" child2KeepAdhesin: %s", &mode.child2KeepAdhesin);
+
+			file.readf(
+				" color: SDL_Color(%s, %s, %s, 0)",
+				&mode.color.r,
+				&mode.color.g,
+				&mode.color.b,
+			);
+			genome.cellModes ~= mode;
+		}
+
+		return genome;
+	}
 };
 
 enum CellType {
@@ -93,42 +132,4 @@ void print(File file, Genome genome) {
 		file.writeln("color: ", mode.color);
 		file.writeln();
 	}
-}
-
-Genome load(ref Genome genome, string filename) {
-	genome.cellModes.destroy();
-	auto file = File(filename, "r");
-
-	int length;
-	file.readf("numModes: %s", &length);
-	foreach (i; 0 .. length) {
-		CellMode mode;
-		string cellType;
-		file.readf(" cellType: %s\n", &cellType);
-		mode.cellType = to!CellType(cellType);
-
-		file.readf(" makeAdhesin: %s", &mode.makeAdhesin);
-		file.readf(" nutrientPriority: %s", &mode.nutrientPriority);
-		file.readf(" splitThreshold: %s", &mode.splitThreshold);
-		file.readf(" splitRatio: %s", &mode.splitRatio);
-		file.readf(" splitAngle: %s", &mode.splitAngle);
-
-		file.readf(" child1Rotation: %s", &mode.child1Rotation);
-		file.readf(" child1Mode: %s", &mode.child1Mode);
-		file.readf(" child1KeepAdhesin: %s", &mode.child1KeepAdhesin);
-
-		file.readf(" child2Rotation: %s", &mode.child2Rotation);
-		file.readf(" child2Mode: %s", &mode.child2Mode);
-		file.readf(" child2KeepAdhesin: %s", &mode.child2KeepAdhesin);
-
-		file.readf(
-			" color: SDL_Color(%s, %s, %s, 0)",
-			&mode.color.r,
-			&mode.color.g,
-			&mode.color.b,
-		);
-		genome.cellModes ~= mode;
-	}
-
-	return genome;
 }
