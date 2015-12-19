@@ -7,6 +7,7 @@ import derelict.sdl2.ttf;
 import cell;
 import food;
 import state;
+import sdl_utils;
 import render_state;
 import misc.transforms;
 
@@ -80,17 +81,15 @@ void drawRect(
 	RenderState state,
 	vec2d topLeft,
 	vec2d dimensions,
-	ubyte r,
-	ubyte g,
-	ubyte b,
-	ubyte a,
+	SDL_Color color,
+	ubyte alpha,
 ) {
 	auto renderTopLeft = state.worldToRenderCoords(topLeft);
 	auto drawRect = getRectFromVectors(
 		renderTopLeft,
 		renderTopLeft + dimensions
 	);
-	SDL_SetRenderDrawColor(state.renderer, r, g, b, a);
+	setRenderDrawColor(state.renderer, color, alpha);
 	SDL_RenderFillRect(state.renderer, &drawRect);
 }
 
@@ -98,15 +97,13 @@ void drawLine(
 	RenderState state,
 	Vector!(double, 2) point1,
 	Vector!(double, 2) point2,
-	ubyte r,
-	ubyte g,
-	ubyte b,
-	ubyte a,
+	SDL_Color color,
+	ubyte alpha,
 ) {
 	point1 = state.worldToRenderCoords(point1);
 	point2 = state.worldToRenderCoords(point2);
 
-	SDL_SetRenderDrawColor(state.renderer, r, g, b, a);
+	setRenderDrawColor(state.renderer, color, alpha);
 	SDL_RenderDrawLine(
 		state.renderer,
 		cast(int)point1.x,

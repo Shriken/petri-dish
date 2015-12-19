@@ -4,6 +4,7 @@ import std.stdio;
 import std.random;
 import std.algorithm;
 import gfm.math.vector;
+import derelict.sdl2.sdl;
 
 import genome;
 import render;
@@ -56,7 +57,8 @@ class Cell {
 		state.drawRect(
 			pos - Vector!(double, 2)(rad, rad),
 			Vector!(double, 2)(rad * 2, rad * 2),
-			mode.color.r, mode.color.g, mode.color.b, 0xff
+			mode.color,
+			0xff
 		);
 
 		// draw adhesin bonds
@@ -64,7 +66,8 @@ class Cell {
 			state.drawLine(
 				pos,
 				cell.pos,
-				0xff, 0xff, 0xff, 0xff
+				SDL_Color(0xff, 0xff, 0xff),
+				0xff
 			);
 		}
 	}

@@ -1,9 +1,9 @@
 module misc.color;
 
 struct Color {
-	byte r;
-	byte g;
-	byte b;
+	ubyte r;
+	ubyte g;
+	ubyte b;
 
 	this(byte r, byte g, byte b) {
 		this.r = r;
@@ -12,8 +12,8 @@ struct Color {
 	}
 
 	this(int r, int g, int b) {
-		this.r = cast(byte)r;
-		this.g = cast(byte)g;
-		this.b = cast(byte)b;
+		this.r = cast(ubyte)r;
+		this.g = cast(ubyte)g;
+		this.b = cast(ubyte)b;
 	}
 };

@@ -1,4 +1,5 @@
 import gfm.math.vector;
+import derelict.sdl2.sdl;
 
 import render;
 import render_state;
@@ -20,7 +21,8 @@ class Food {
 		state.drawRect(
 			pos - Vector!(double, 2)(rad, rad),
 			Vector!(double, 2)(rad * 2, rad * 2),
-			0x96, 0x4b, 0x00, 0xff
+			SDL_Color(0x96, 0x4b, 0x00),
+			0xff
 		);
 	}
 };

@@ -1,5 +1,7 @@
 module genome;
 
+import derelict.sdl2.sdl;
+
 import std.conv;
 import std.stdio;
 import std.random;
@@ -21,10 +23,10 @@ class Genome {
 			cellModes ~= CellMode();
 			cellModes[$ - 1].child1Mode = to!byte(i);
 			cellModes[$ - 1].child2Mode = to!byte(i);
-			cellModes[$ - 1].color = Color(
-				cast(byte)uniform(0, 255),
-				cast(byte)uniform(0, 255),
-				cast(byte)uniform(0, 255)
+			cellModes[$ - 1].color = SDL_Color(
+				cast(ubyte)uniform(0, 255),
+				cast(ubyte)uniform(0, 255),
+				cast(ubyte)uniform(0, 255)
 			);
 		}
 	}
@@ -60,7 +62,7 @@ struct CellMode {
 	byte child2Mode; // 0 - 15
 	bool child2KeepAdhesin = true;
 
-	Color color;
+	SDL_Color color;
 };
 
 void save(Genome genome, string filename) {
@@ -120,7 +122,7 @@ Genome load(ref Genome genome, string filename) {
 		file.readf(" child2KeepAdhesin: %s", &mode.child2KeepAdhesin);
 
 		file.readf(
-			" color: Color(%s, %s, %s)",
+			" color: SDL_Color(%s, %s, %s)",
 			&mode.color.r,
 			&mode.color.g,
 			&mode.color.b
