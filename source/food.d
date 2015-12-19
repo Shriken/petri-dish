@@ -16,7 +16,7 @@ class Food {
 		pos = Vector!(double, 2)(x, y);
 	}
 
-	void render(RenderState *state) {
+	void render(RenderState state) {
 		state.drawRect(
 			pos - Vector!(double, 2)(rad, rad),
 			Vector!(double, 2)(rad * 2, rad * 2),

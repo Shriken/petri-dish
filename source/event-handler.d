@@ -4,7 +4,7 @@ import derelict.sdl2.sdl;
 
 import state;
 
-void handleEvent(State *state, SDL_Event event) {
+void handleEvent(State state, SDL_Event event) {
 	switch (event.type) {
 		case SDL_QUIT:
 			state.simState.running = false;
@@ -20,7 +20,7 @@ void handleEvent(State *state, SDL_Event event) {
 	}
 }
 
-void handleKey(State *state, SDL_Keycode keycode) {
+void handleKey(State state, SDL_Keycode keycode) {
 	switch (keycode) {
 		case SDLK_q:
 			state.simState.running = false;
@@ -36,7 +36,7 @@ void handleKey(State *state, SDL_Keycode keycode) {
 	}
 }
 
-void handleClick(State *state, SDL_MouseButtonEvent event) {
+void handleClick(State state, SDL_MouseButtonEvent event) {
 	if (event.type == SDL_MOUSEBUTTONDOWN) {
 		state.simState.addCell(
 			event.x - state.simState.FIELD_RAD,

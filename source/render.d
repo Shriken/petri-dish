@@ -10,12 +10,11 @@ import state;
 import render_state;
 import misc.transforms;
 
-void render(State *state) {
-	auto renderState = &state.renderState;
+void render(State state) {
+	auto renderState = state.renderState;
 
 	// clear screen
-	SDL_SetRenderDrawColor(renderState.renderer, 0, 0, 0, 0xff);
-	SDL_RenderClear(renderState.renderer);
+	renderState.clear();
 
 	// render food
 	foreach (ref Food food; state.simState.food) {
@@ -35,7 +34,12 @@ void render(State *state) {
 	SDL_RenderPresent(renderState.renderer);
 }
 
-void renderDebug(State *state) {
+void clear(RenderState state) {
+	SDL_SetRenderDrawColor(state.renderer, 0, 0, 0, 0xff);
+	SDL_RenderClear(state.renderer);
+}
+
+void renderDebug(State state) {
 	// draw fps in top left
 	auto fpsText = to!(char[])(state.fps);
 	fpsText ~= '\0';
@@ -73,7 +77,7 @@ void drawText(RenderState state, char[] text, int x, int y) {
 }
 
 void drawRect(
-	RenderState *state,
+	RenderState state,
 	vec2d topLeft,
 	vec2d dimensions,
 	ubyte r,
@@ -81,7 +85,7 @@ void drawRect(
 	ubyte b,
 	ubyte a,
 ) {
-	auto renderTopLeft = (*state).worldToRenderCoords(topLeft);
+	auto renderTopLeft = state.worldToRenderCoords(topLeft);
 	auto drawRect = getRectFromVectors(
 		renderTopLeft,
 		renderTopLeft + dimensions
@@ -91,7 +95,7 @@ void drawRect(
 }
 
 void drawLine(
-	RenderState *state,
+	RenderState state,
 	Vector!(double, 2) point1,
 	Vector!(double, 2) point2,
 	ubyte r,
@@ -99,8 +103,8 @@ void drawLine(
 	ubyte b,
 	ubyte a,
 ) {
-	point1 = (*state).worldToRenderCoords(point1);
-	point2 = (*state).worldToRenderCoords(point2);
+	point1 = state.worldToRenderCoords(point1);
+	point2 = state.worldToRenderCoords(point2);
 
 	SDL_SetRenderDrawColor(state.renderer, r, g, b, a);
 	SDL_RenderDrawLine(
@@ -112,7 +116,7 @@ void drawLine(
 	);
 }
 
-bool initRenderer(RenderState *state) {
+bool initRenderer(RenderState state) {
 	// set up SDL
 	DerelictSDL2.load();
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -160,7 +164,7 @@ bool initRenderer(RenderState *state) {
 	return true;
 }
 
-void cleanupRenderer(RenderState *state) {
+void cleanupRenderer(RenderState state) {
 	SDL_DestroyRenderer(state.renderer);
 	SDL_DestroyWindow(state.window);
 	SDL_Quit();

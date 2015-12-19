@@ -51,7 +51,7 @@ class Cell {
 		this.angle = uniform(0, 2 * PI);
 	}
 
-	void render(RenderState *state) {
+	void render(RenderState state) {
 		auto rad = this.rad;
 		state.drawRect(
 			pos - Vector!(double, 2)(rad, rad),

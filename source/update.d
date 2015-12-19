@@ -15,7 +15,7 @@ const double VISCOSITY_SLOWING_FACTOR = 1 / VISCOSITY;
 // rate of mass flow through adhesin
 const double MASS_FLOW_RATE = 0.04;
 
-void update(SimulationState *state) {
+void update(SimulationState state) {
 	auto FIELD_RAD = state.FIELD_RAD;
 
 	// update cell positions
@@ -95,7 +95,7 @@ void update(SimulationState *state) {
 	}
 }
 
-void updatePos(SimulationState *state, ref Cell cell) {
+void updatePos(SimulationState state, ref Cell cell) {
 	auto FIELD_RAD = state.FIELD_RAD;
 	auto pos = &cell.pos;
 
@@ -132,7 +132,7 @@ void updatePos(SimulationState *state, ref Cell cell) {
 	}
 }
 
-void handleSpecialAbility(SimulationState *state, Cell cell) {
+void handleSpecialAbility(SimulationState state, Cell cell) {
 	final switch (cell.mode.cellType) {
 		case CellType.phagocyte:
 			// consume nearby food

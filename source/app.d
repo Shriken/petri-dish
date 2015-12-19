@@ -17,7 +17,7 @@ const int SLEEP_THRESHOLD = 1_000;
 
 void main() {
 	State state = new State();
-	if (!initRenderer(&state.renderState)) {
+	if (!initRenderer(state.renderState)) {
 		writeln("an error occurred initializing the renderer");
 		return;
 	}
@@ -37,15 +37,15 @@ void main() {
 		// handle event queue
 		SDL_Event event;
 		while (SDL_PollEvent(&event) != 0) {
-			handleEvent(&state, event);
+			handleEvent(state, event);
 		}
 
 		// update and render
 		if (!state.paused) {
-			update.update(&state.simState);
+			update.update(state.simState);
 		}
-		render.render(&state);
+		render.render(state);
 	}
 
-	cleanupRenderer(&state.renderState);
+	cleanupRenderer(state.renderState);
 }
