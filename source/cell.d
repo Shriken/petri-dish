@@ -148,4 +148,13 @@ class Cell {
 	double massConsumption() {
 		return 0.003;
 	}
+
+	void collide(Cell otherCell) {
+		auto posDiff = pos - otherCell.pos;
+		auto radSum = rad + otherCell.rad;
+		auto diffSquared = posDiff.squaredLength();
+		if (diffSquared < radSum ^^ 2) {
+			vel += posDiff / diffSquared;
+		}
+	}
 };

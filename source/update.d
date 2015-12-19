@@ -28,15 +28,8 @@ void update(SimulationState state) {
 		// handle collisions
 		foreach (ref Cell otherCell; state.cells) {
 			// don't collide with yourself
-			if (&cell == &otherCell) {
-				continue;
-			}
-
-			auto posDiff = cell.pos - otherCell.pos;
-			auto radSum = cell.rad + otherCell.rad;
-			auto diffSquared = posDiff.squaredLength();
-			if (diffSquared < radSum ^^ 2) {
-				cell.vel += posDiff / diffSquared;
+			if (cell !is otherCell) {
+				cell.collide(otherCell);
 			}
 		}
 
