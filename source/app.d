@@ -1,4 +1,5 @@
 import std.conv;
+import std.path;
 import std.stdio;
 import std.datetime;
 import std.algorithm;
@@ -9,13 +10,16 @@ import state;
 import render;
 import update;
 import event_handler;
+import misc.path_consts;
 
 const int TICKS_PER_SECOND = 60;
 const int MICROS_PER_SECOND = 1_000_000;
 const int MICROS_PER_TICK = MICROS_PER_SECOND / TICKS_PER_SECOND;
 const int SLEEP_THRESHOLD = 1_000;
 
-void main() {
+void main(string[] args) {
+	setBasePath(buildNormalizedPath(args[0], ".."));
+
 	State state = new State();
 	if (!initRenderer(state.renderState)) {
 		writeln("an error occurred initializing the renderer");

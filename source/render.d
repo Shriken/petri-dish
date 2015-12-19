@@ -1,4 +1,5 @@
 import std.conv;
+import std.path;
 import std.stdio;
 import gfm.math.vector;
 import derelict.sdl2.sdl;
@@ -10,6 +11,7 @@ import state;
 import sdl_utils;
 import render_state;
 import misc.transforms;
+import misc.path_consts;
 
 void render(State state) {
 	auto renderState = state.renderState;
@@ -152,7 +154,10 @@ bool initRenderer(RenderState state) {
 	}
 
 	// load the font
-	state.debugTextFont = TTF_OpenFont("res/monaco.ttf", 10);
+	state.debugTextFont = TTF_OpenFont(
+		buildNormalizedPath(RES_PATH, "monaco.ttf").dup.ptr,
+		10
+	);
 	if (state.debugTextFont is null) {
 		writeln("font not present");
 		return false;

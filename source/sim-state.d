@@ -1,12 +1,14 @@
 module sim_state;
 
-import std.random;
 import std.math;
+import std.path;
+import std.random;
 import derelict.sdl2.sdl;
 
 import cell;
 import food;
 import genome;
+import misc.path_consts;
 
 class SimulationState {
 	bool running = true;
@@ -19,7 +21,9 @@ class SimulationState {
 	double foodGenStatus = 0;
 
 	this() {
-		genome = Genome.load("simple-swimmers.gnm");
+		genome = Genome.load(
+			buildNormalizedPath(RES_PATH, "genomes/simple-swimmers.gnm")
+		);
 
 		// spawn starter cells
 		foreach (int i; 0 .. 50) {
