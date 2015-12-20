@@ -30,7 +30,5 @@ void render(State state) {
 
 void renderDebug(State state) {
 	// draw fps in top left
-	auto fpsText = to!(char[])(state.fps);
-	fpsText ~= '\0';
-	drawText(state.renderState, fpsText, 0, 0);
+	drawText(state.renderState, to!string(state.fps), 0, 0);
 }
