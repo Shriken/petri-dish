@@ -41,7 +41,8 @@ class ExperimentWidget : Widget {
 
 	void debugRender(State state) {
 		// draw fps in top left
-		auto fpsText = to!string(state.fps);
-		drawText(state.renderState, fpsText, 0, 0);
+		auto fpsText = to!(char[])(state.fps);
+		fpsText ~= '\0';
+		drawText(state.renderState, fpsText.idup, 0, 0);
 	}
 }
