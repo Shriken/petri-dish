@@ -1,5 +1,6 @@
 module widget.experiment_widget;
 
+import std.conv;
 import gfm.math.vector;
 import derelict.sdl2.sdl;
 
@@ -28,8 +29,19 @@ class ExperimentWidget : Widget {
 			foreach (cell; state.simState.cells) {
 				cell.render(renderState);
 			}
+
+			// debug rendering
+			if (renderState.debugRender) {
+				debugRender(state);
+			}
 		}
 
 		void handleEvent(SDL_Event event) {}
+	}
+
+	void debugRender(State state) {
+		// draw fps in top left
+		auto fpsText = to!string(state.fps);
+		drawText(state.renderState, fpsText, 0, 0);
 	}
 }
