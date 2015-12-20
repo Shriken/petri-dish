@@ -1,11 +1,10 @@
 import std.conv;
-import std.path;
 import std.stdio;
 import gfm.math.vector;
 import derelict.sdl2.sdl;
 import derelict.sdl2.ttf;
 
-import consts;
+import misc.resources;
 import misc.sdl_utils;
 import misc.transforms;
 import actor.cell;
@@ -155,7 +154,7 @@ bool initRenderer(RenderState state) {
 
 	// load the font
 	state.debugTextFont = TTF_OpenFont(
-		buildNormalizedPath(RES_PATH, "monaco.ttf").dup.ptr,
+		getResourcePath("monaco.ttf").dup.ptr,
 		10
 	);
 	if (state.debugTextFont is null) {

@@ -7,9 +7,9 @@ import core.thread;
 import derelict.sdl2.sdl;
 
 import event;
-import consts;
 import render;
 import update;
+import misc.resources;
 import state.state;
 
 const int TICKS_PER_SECOND = 60;

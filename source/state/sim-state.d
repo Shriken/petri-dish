@@ -1,12 +1,11 @@
 module state.sim_state;
 
 import std.math;
-import std.path;
 import std.random;
 import derelict.sdl2.sdl;
 
-import consts;
 import genome;
+import misc.resources;
 import actor.cell;
 import actor.food;
 
@@ -22,7 +21,7 @@ class SimulationState {
 
 	this() {
 		genome = Genome.load(
-			buildNormalizedPath(RES_PATH, "genomes/simple-swimmers.gnm")
+			getResourcePath("genomes/simple-swimmers.gnm")
 		);
 
 		// spawn starter cells
