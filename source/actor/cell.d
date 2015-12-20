@@ -9,7 +9,7 @@ import gfm.math.vector;
 import derelict.sdl2.sdl;
 
 import genome;
-import render;
+import render_utils;
 import state.render_state;
 
 class Cell {

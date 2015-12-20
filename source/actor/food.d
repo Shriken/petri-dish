@@ -3,7 +3,7 @@ module actor.food;
 import gfm.math.vector;
 import derelict.sdl2.sdl;
 
-import render;
+import render_utils;
 import state.render_state;
 
 class Food {

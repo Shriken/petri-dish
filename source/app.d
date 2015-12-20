@@ -21,7 +21,7 @@ void main(string[] args) {
 	setBasePath(buildNormalizedPath(args[0], ".."));
 
 	State state = new State();
-	if (!initRenderer(state.renderState)) {
+	if (!state.renderState.init()) {
 		writeln("an error occurred initializing the renderer");
 		return;
 	}
@@ -50,6 +50,4 @@ void main(string[] args) {
 		}
 		render.render(state);
 	}
-
-	cleanupRenderer(state.renderState);
 }
