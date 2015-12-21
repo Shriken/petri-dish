@@ -8,6 +8,7 @@ import state.state;
 abstract class Widget {
 	vec2i offset;
 	vec2i dimensions;
+	int height = 0;
 
 	this(vec2i offset, vec2i dimensions) {
 		this.offset = offset;
@@ -15,5 +16,5 @@ abstract class Widget {
 	}
 
 	void render(State state);
-	void handleEvent(SDL_Event event);
+	void handleClick(State state, SDL_MouseButtonEvent event);
 }

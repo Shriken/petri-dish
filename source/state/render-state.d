@@ -6,22 +6,15 @@ import derelict.sdl2.sdl;
 import derelict.sdl2.ttf;
 
 import misc.resources;
-import widget.widget;
-import widget.experiment_widget;
 
 class RenderState {
 	vec2i windowDimensions = vec2i(640, 640);
 	SDL_Window *window = null;
 	SDL_Renderer *renderer = null;
-	Widget[] widgets;
 
 	bool debugRender = true;
 	TTF_Font *debugTextFont;
 	vec2d scale = vec2d(1, 1);
-
-	this() {
-		widgets ~= new ExperimentWidget(vec2i(0, 0), windowDimensions);
-	}
 
 	bool init() {
 		// set up SDL

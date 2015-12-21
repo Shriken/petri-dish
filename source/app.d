@@ -6,8 +6,7 @@ import std.algorithm;
 import core.thread;
 import derelict.sdl2.sdl;
 
-import event;
-import render;
+import ui;
 import update;
 import misc.resources;
 import state.state;
@@ -20,7 +19,8 @@ const int SLEEP_THRESHOLD = 1_000;
 void main(string[] args) {
 	setBasePath(buildNormalizedPath(args[0], ".."));
 
-	State state = new State();
+	auto state = new State();
+	auto ui = new UI(state.renderState.windowDimensions);
 	if (!state.renderState.init()) {
 		writeln("an error occurred initializing the renderer");
 		return;
@@ -41,13 +41,13 @@ void main(string[] args) {
 		// handle event queue
 		SDL_Event event;
 		while (SDL_PollEvent(&event) != 0) {
-			handleEvent(state, event);
+			ui.handleEvent(state, event);
 		}
 
 		// update and render
 		if (!state.paused) {
 			update.update(state.simState);
 		}
-		render.render(state);
+		ui.render(state);
 	}
 }

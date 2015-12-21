@@ -40,7 +40,14 @@ class ExperimentWidget : Widget {
 			}
 		}
 
-		void handleEvent(SDL_Event event) {}
+		void handleClick(State state, SDL_MouseButtonEvent event) {
+			if (event.type == SDL_MOUSEBUTTONDOWN) {
+				state.simState.addCell(
+					event.x - state.simState.FIELD_RAD,
+					event.y - state.simState.FIELD_RAD
+				);
+			}
+		}
 	}
 
 	void debugRender(State state) {
