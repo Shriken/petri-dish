@@ -16,6 +16,10 @@ import widget.widget;
  * Can't think of a better name right now
  */
 class ExperimentWidget : Widget {
+	this(vec2i offset, vec2i dimensions) {
+		super(offset, dimensions);
+	}
+
 	override {
 		void render(State state) {
 			auto renderState = state.renderState;

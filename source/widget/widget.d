@@ -9,6 +9,11 @@ abstract class Widget {
 	vec2i offset;
 	vec2i dimensions;
 
+	this(vec2i offset, vec2i dimensions) {
+		this.offset = offset;
+		this.dimensions = dimensions;
+	}
+
 	void render(State state);
 	void handleEvent(SDL_Event event);
 }

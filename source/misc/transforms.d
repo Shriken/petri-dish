@@ -1,11 +1,10 @@
 module misc.transforms;
 
-import gfm.math.vector;
 import derelict.sdl2.sdl;
 
-SDL_Rect getRectFromVectors(
-	vec2d topLeft,
-	vec2d botRight
+SDL_Rect getRectFromVectors(Vec_T)(
+	Vec_T topLeft,
+	Vec_T botRight
 ) {
 	SDL_Rect rect;
 	rect.x = cast(int)topLeft.x;

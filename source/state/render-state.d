@@ -20,7 +20,7 @@ class RenderState {
 	vec2d scale = vec2d(1, 1);
 
 	this() {
-		widgets ~= new ExperimentWidget();
+		widgets ~= new ExperimentWidget(vec2i(0, 0), windowDimensions);
 	}
 
 	bool init() {
