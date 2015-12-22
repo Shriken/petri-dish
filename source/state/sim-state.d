@@ -11,6 +11,7 @@ import actor.food;
 
 class SimulationState {
 	bool running = true;
+	bool paused = false;
 	const double FIELD_RAD = 320;
 	Genome genome;
 	Cell[] cells;

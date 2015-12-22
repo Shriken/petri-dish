@@ -45,7 +45,7 @@ void main(string[] args) {
 		}
 
 		// update and render
-		if (!state.paused) {
+		if (!state.simState.paused) {
 			update.update(state.simState);
 		}
 		ui.render(state);

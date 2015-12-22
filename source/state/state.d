@@ -6,7 +6,6 @@ import state.render_state;
 class State {
 	SimulationState simState;
 	RenderState renderState;
-	bool paused = false;
 	double fps;
 
 	this() {

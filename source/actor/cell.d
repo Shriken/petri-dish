@@ -57,7 +57,7 @@ class Cell {
 
 	void render(RenderState state) {
 		auto rad = this.rad;
-		state.drawRect(
+		state.drawRectWorldCoords(
 			pos - Vector!(double, 2)(rad, rad),
 			Vector!(double, 2)(rad * 2, rad * 2),
 			mode.color,

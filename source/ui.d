@@ -6,11 +6,13 @@ import render_utils;
 import misc.transforms;
 import state.state;
 import widget.widget;
+import widget.menu_widget;
 import widget.experiment_widget;
 
 class UI {
-	private Widget focus;
-	private Widget[] widgets;
+	Widget focus;
+	Widget[] widgets;
+	MenuWidget currentMenu;
 
 	vec2i dimensions;
 
@@ -75,14 +77,32 @@ class UI {
 		auto renderState = state.renderState;
 		switch (keycode) {
 			case SDLK_q:
+				// quit
 				state.simState.running = false;
 				break;
+
 			case SDLK_p:
-				state.paused = !state.paused;
+				// toggle pause
+				state.simState.paused = !state.simState.paused;
 				break;
+
 			case SDLK_d:
+				// toggle debug rendering
 				renderState.debugRender = !renderState.debugRender;
 				break;
+
+			case SDLK_ESCAPE:
+				// open menu
+				if (currentMenu is null) {
+					openMenu(new MenuWidget(
+						vec2i(0, 0),
+						state.renderState.windowDimensions
+					));
+				} else {
+					closeMenu();
+				}
+				break;
+
 			default:
 				break;
 		}
@@ -108,5 +128,27 @@ class UI {
 		event.x -= curWidget.offset.x;
 		event.y -= curWidget.offset.y;
 		curWidget.handleClick(state, event);
+	}
+
+	void openMenu(MenuWidget menu) {
+		if (currentMenu !is null) {
+			closeMenu();
+		}
+
+		currentMenu = menu;
+		widgets ~= menu;
+		auto maxHeight = -1;
+		foreach (widget; widgets) {
+			if (widget.height > maxHeight) {
+				maxHeight = widget.height;
+			}
+		}
+		menu.height = maxHeight + 1;
+	}
+
+	void closeMenu() {
+		assert(currentMenu !is null);
+		widgets = widgets.remove(widgets.countUntil(currentMenu));
+		currentMenu = null;
 	}
 }

@@ -47,31 +47,62 @@ void drawText(RenderState state, string text, int x, int y) {
 	SDL_FreeSurface(textSurface);
 }
 
-void drawRect(
+void drawRectWorldCoords(Vec_T)(
 	RenderState state,
-	vec2d topLeft,
-	vec2d dimensions,
+	Vec_T topLeft,
+	Vec_T dimensions,
 	SDL_Color color,
 	ubyte alpha,
 ) {
-	auto renderTopLeft = state.worldToRenderCoords(topLeft);
+	drawRect(
+		state,
+		state.worldToRenderCoords(cast(vec2d)topLeft),
+		dimensions,
+		color,
+		alpha
+	);
+}
+
+void drawRect(Vec_T)(
+	RenderState state,
+	Vec_T topLeft,
+	Vec_T dimensions,
+	SDL_Color color,
+	ubyte alpha,
+) {
 	auto drawRect = getRectFromVectors(
-		renderTopLeft,
-		renderTopLeft + dimensions
+		topLeft,
+		topLeft + dimensions
 	);
 	setRenderDrawColor(state.renderer, color, alpha);
 	SDL_RenderFillRect(state.renderer, &drawRect);
 }
 
-void drawLine(
+void drawLineWorldCoords(Vec_T)(
 	RenderState state,
-	Vector!(double, 2) point1,
-	Vector!(double, 2) point2,
+	Vec_T point1,
+	Vec_T point2,
 	SDL_Color color,
 	ubyte alpha,
 ) {
-	point1 = state.worldToRenderCoords(point1);
-	point2 = state.worldToRenderCoords(point2);
+	drawLine(
+		state,
+		state.worldToRenderCoords(cast(vec2d)point1),
+		state.worldToRenderCoords(cast(vec2d)point2),
+		color,
+		alpha
+	);
+}
+
+void drawLine(Vec_T)(
+	RenderState state,
+	Vec_T point1,
+	Vec_T point2,
+	SDL_Color color,
+	ubyte alpha,
+) {
+	point1 = state.worldToRenderCoords(cast(vec2d)point1);
+	point2 = state.worldToRenderCoords(cast(vec2d)point2);
 
 	setRenderDrawColor(state.renderer, color, alpha);
 	SDL_RenderDrawLine(
