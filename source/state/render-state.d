@@ -46,6 +46,7 @@ class RenderState {
 		// initialize the renderer
 		renderer = SDL_CreateRenderer(window, -1, 0);
 		SDL_RenderSetScale(renderer, scale.x, scale.y);
+		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
 		// set up sdl_ttf
 		DerelictSDL2ttf.load();

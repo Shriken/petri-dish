@@ -4,6 +4,7 @@ import gfm.math.vector;
 import derelict.sdl2.sdl;
 
 import render_utils;
+import misc.transforms;
 import state.state;
 import widget.widget;
 import widget.button_widget;
@@ -13,6 +14,12 @@ class MenuWidget : Widget {
 
 	this(vec2i offset, vec2i dimensions) {
 		super(offset, dimensions);
+
+		auto buttonDimensions = vec2i(200, 50);
+		buttons ~= new ButtonWidget(
+			dimensions / 2 - buttonDimensions / 2,
+			buttonDimensions
+		);
 	}
 
 	override {
@@ -28,6 +35,11 @@ class MenuWidget : Widget {
 			);
 
 			foreach (button; buttons) {
+				auto clipRect = getRectFromVectors(
+					button.offset,
+					button.offset + button.dimensions
+				);
+				SDL_RenderSetViewport(renderState.renderer, &clipRect);
 				button.render(state);
 			}
 		}
