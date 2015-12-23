@@ -31,6 +31,7 @@ class ButtonWidget : Widget {
 			drawTextCentered(
 				state.renderState,
 				text,
+				state.renderState.buttonFont,
 				center.x,
 				center.y,
 			);

@@ -14,6 +14,7 @@ class RenderState {
 
 	bool debugRender = true;
 	TTF_Font *debugTextFont;
+	TTF_Font *buttonFont;
 	vec2d scale = vec2d(1, 1);
 
 	bool init() {
@@ -55,10 +56,19 @@ class RenderState {
 			return false;
 		}
 
-		// load the font
+		// load the fonts
 		debugTextFont = TTF_OpenFont(
 			getResourcePath("monaco.ttf").dup.ptr,
 			10
+		);
+		if (debugTextFont is null) {
+			writeln("font not present");
+			return false;
+		}
+
+		buttonFont = TTF_OpenFont(
+			getResourcePath("monaco.ttf").dup.ptr,
+			20
 		);
 		if (debugTextFont is null) {
 			writeln("font not present");

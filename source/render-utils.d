@@ -17,13 +17,15 @@ void setRenderDrawColor(
 	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, alpha);
 }
 
-void drawText(RenderState state, string text, int x, int y) {
+void drawText(
+	RenderState state,
+	string text,
+	TTF_Font *font,
+	int x,
+	int y
+) {
 	auto color = SDL_Color(0xff, 0xff, 0xff, 0xff);
-	auto textSurface = TTF_RenderText_Solid(
-		state.debugTextFont,
-		text.dup.ptr,
-		color
-	);
+	auto textSurface = TTF_RenderText_Solid(font, text.dup.ptr, color);
 	if (textSurface is null) {
 		writeln(to!string(SDL_GetError()));
 		return;
@@ -47,13 +49,15 @@ void drawText(RenderState state, string text, int x, int y) {
 	SDL_FreeSurface(textSurface);
 }
 
-void drawTextCentered(RenderState state, string text, int x, int y) {
+void drawTextCentered(
+	RenderState state,
+	string text,
+	TTF_Font *font,
+	int x,
+	int y
+) {
 	auto color = SDL_Color(0xff, 0xff, 0xff, 0xff);
-	auto textSurface = TTF_RenderText_Solid(
-		state.debugTextFont,
-		text.dup.ptr,
-		color
-	);
+	auto textSurface = TTF_RenderText_Solid(font, text.dup.ptr, color);
 	if (textSurface is null) {
 		writeln(to!string(SDL_GetError()));
 		return;
