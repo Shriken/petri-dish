@@ -11,10 +11,14 @@ abstract class Widget {
 	int height = 0;
 
 	this(vec2i offset, vec2i dimensions) {
-		this.offset = offset;
-		this.dimensions = dimensions;
+		updatePosition(offset, dimensions);
 	}
 
 	void render(State state);
 	void handleClick(State state, SDL_MouseButtonEvent event);
+
+	void updatePosition(vec2i offset, vec2i dimensions) {
+		this.offset = offset;
+		this.dimensions = dimensions;
+	}
 }

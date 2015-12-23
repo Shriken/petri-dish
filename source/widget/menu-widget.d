@@ -14,16 +14,14 @@ class MenuWidget : Widget {
 
 	this(vec2i offset, vec2i dimensions) {
 		super(offset, dimensions);
-
-		auto buttonDimensions = vec2i(200, 50);
-		buttons ~= new ButtonWidget(
-			dimensions / 2 - buttonDimensions / 2,
-			buttonDimensions
-		);
+		foreach (i; 0 .. 3) {
+			buttons ~= new ButtonWidget(vec2i(0, 0), vec2i(0, 0));
+		}
+		updatePosition(offset, dimensions);
 	}
 
 	override {
-		void render(State state) {
+		void render(State state, ) {
 			auto renderState = state.renderState;
 
 			drawRect(
@@ -45,5 +43,20 @@ class MenuWidget : Widget {
 		}
 
 		void handleClick(State state, SDL_MouseButtonEvent event) {}
+		void updatePosition(vec2i offset, vec2i dimensions) {
+			this.offset = offset;
+			this.dimensions = dimensions;
+
+			auto baseOffset = offset + vec2i(
+				dimensions.x / 2,
+				dimensions.y / 3
+			);
+			auto interButtonSpace = 20;
+			foreach (int i, ButtonWidget button; buttons) {
+				button.dimensions = vec2i(200, 50);
+				button.offset = baseOffset - button.dimensions / 2;
+				button.offset.y += i * (button.dimensions.y + interButtonSpace);
+			}
+		}
 	}
 }

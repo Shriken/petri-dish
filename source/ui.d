@@ -137,6 +137,8 @@ class UI {
 
 		currentMenu = menu;
 		widgets ~= menu;
+
+		// push menu to the front
 		auto maxHeight = -1;
 		foreach (widget; widgets) {
 			if (widget.height > maxHeight) {
