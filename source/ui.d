@@ -31,7 +31,7 @@ class UI {
 		foreach (widget; widgets) {
 			auto clipRect = getRectFromVectors(
 				widget.offset,
-				widget.dimensions
+				widget.offset + widget.dimensions
 			);
 			SDL_RenderSetViewport(renderState.renderer, &clipRect);
 			widget.render(state);
