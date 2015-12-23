@@ -11,8 +11,10 @@ class ButtonWidget : Widget {
 	string text;
 	SDL_Color color = SDL_Color(0x20, 0x5a, 0x3a);
 
-	this(vec2i offset, vec2i dimensions) {
-		super(offset, dimensions);
+	this(string text) {
+		super(vec2i(0, 0), vec2i(0, 0));
+
+		this.text = text;
 	}
 
 	override {
@@ -23,6 +25,14 @@ class ButtonWidget : Widget {
 				dimensions,
 				color,
 				0xff
+			);
+
+			auto center = dimensions / 2;
+			drawTextCentered(
+				state.renderState,
+				text,
+				center.x,
+				center.y,
 			);
 		}
 

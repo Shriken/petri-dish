@@ -47,6 +47,36 @@ void drawText(RenderState state, string text, int x, int y) {
 	SDL_FreeSurface(textSurface);
 }
 
+void drawTextCentered(RenderState state, string text, int x, int y) {
+	auto color = SDL_Color(0xff, 0xff, 0xff, 0xff);
+	auto textSurface = TTF_RenderText_Solid(
+		state.debugTextFont,
+		text.dup.ptr,
+		color
+	);
+	if (textSurface is null) {
+		writeln(to!string(SDL_GetError()));
+		return;
+	}
+
+	auto textTexture = SDL_CreateTextureFromSurface(
+		state.renderer,
+		textSurface
+	);
+	if (textTexture is null) {
+		writeln(to!string(SDL_GetError()));
+		return;
+	}
+
+	SDL_Rect targetLoc;
+	targetLoc.x = x - textSurface.w / 2;
+	targetLoc.y = y - textSurface.h / 2;
+	targetLoc.w = textSurface.w;
+	targetLoc.h = textSurface.h;
+	SDL_RenderCopy(state.renderer, textTexture, null, &targetLoc);
+	SDL_FreeSurface(textSurface);
+}
+
 void drawRectWorldCoords(Vec_T)(
 	RenderState state,
 	Vec_T topLeft,

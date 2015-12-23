@@ -15,7 +15,7 @@ class MenuWidget : Widget {
 	this(vec2i offset, vec2i dimensions) {
 		super(offset, dimensions);
 		foreach (i; 0 .. 3) {
-			buttons ~= new ButtonWidget(vec2i(0, 0), vec2i(0, 0));
+			buttons ~= new ButtonWidget("stuff!");
 		}
 		updatePosition(offset, dimensions);
 	}
