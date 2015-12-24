@@ -17,6 +17,11 @@ void setRenderDrawColor(
 	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, alpha);
 }
 
+void renderClear(RenderState state) {
+	SDL_SetRenderDrawColor(state.renderer, 0, 0, 0, 0xff);
+	SDL_RenderClear(state.renderer);
+}
+
 void drawText(
 	RenderState state,
 	string text,
@@ -81,22 +86,6 @@ void drawTextCentered(
 	SDL_FreeSurface(textSurface);
 }
 
-void drawRectWorldCoords(Vec_T)(
-	RenderState state,
-	Vec_T topLeft,
-	Vec_T dimensions,
-	SDL_Color color,
-	ubyte alpha,
-) {
-	drawRect(
-		state,
-		state.worldToRenderCoords(cast(vec2d)topLeft),
-		dimensions,
-		color,
-		alpha
-	);
-}
-
 void drawRect(Vec_T)(
 	RenderState state,
 	Vec_T topLeft,
@@ -112,17 +101,17 @@ void drawRect(Vec_T)(
 	SDL_RenderFillRect(state.renderer, &drawRect);
 }
 
-void drawLineWorldCoords(Vec_T)(
+void drawRectWorldCoords(Vec_T)(
 	RenderState state,
-	Vec_T point1,
-	Vec_T point2,
+	Vec_T topLeft,
+	Vec_T dimensions,
 	SDL_Color color,
 	ubyte alpha,
 ) {
-	drawLine(
+	drawRect(
 		state,
-		state.worldToRenderCoords(cast(vec2d)point1),
-		state.worldToRenderCoords(cast(vec2d)point2),
+		state.worldToRenderCoords(cast(vec2d)topLeft),
+		dimensions,
 		color,
 		alpha
 	);
@@ -148,7 +137,18 @@ void drawLine(Vec_T)(
 	);
 }
 
-void renderClear(RenderState state) {
-	SDL_SetRenderDrawColor(state.renderer, 0, 0, 0, 0xff);
-	SDL_RenderClear(state.renderer);
+void drawLineWorldCoords(Vec_T)(
+	RenderState state,
+	Vec_T point1,
+	Vec_T point2,
+	SDL_Color color,
+	ubyte alpha,
+) {
+	drawLine(
+		state,
+		state.worldToRenderCoords(cast(vec2d)point1),
+		state.worldToRenderCoords(cast(vec2d)point2),
+		color,
+		alpha
+	);
 }
