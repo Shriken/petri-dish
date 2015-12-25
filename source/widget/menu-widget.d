@@ -10,18 +10,16 @@ import widget.widget;
 import widget.button_widget;
 
 class MenuWidget : Widget {
-	ButtonWidget[] buttons;
-
 	this(vec2i offset, vec2i dimensions) {
 		super(offset, dimensions);
 		foreach (i; 0 .. 3) {
-			buttons ~= new ButtonWidget("stuff!");
+			children ~= new ButtonWidget("stuff!");
 		}
 		updatePosition(offset, dimensions);
 	}
 
 	override {
-		void render(State state, ) {
+		void renderSelf(State state) {
 			auto renderState = state.renderState;
 
 			drawRect(
@@ -31,15 +29,6 @@ class MenuWidget : Widget {
 				SDL_Color(0xff, 0xff, 0xff),
 				0x80
 			);
-
-			foreach (button; buttons) {
-				auto clipRect = getRectFromVectors(
-					button.offset,
-					button.offset + button.dimensions
-				);
-				SDL_RenderSetViewport(renderState.renderer, &clipRect);
-				button.render(state);
-			}
 		}
 
 		void handleClick(State state, SDL_MouseButtonEvent event) {}
@@ -52,7 +41,9 @@ class MenuWidget : Widget {
 				dimensions.y / 3
 			);
 			auto interButtonSpace = 20;
-			foreach (int i, ButtonWidget button; buttons) {
+			foreach (int i, Widget child; children) {
+				scope(failure) continue;
+				auto button = cast(ButtonWidget)child;
 				button.dimensions = vec2i(200, 50);
 				button.offset = baseOffset - button.dimensions / 2;
 				button.offset.y += i * (button.dimensions.y + interButtonSpace);

@@ -21,7 +21,7 @@ class ExperimentWidget : Widget {
 	}
 
 	override {
-		void render(State state) {
+		void renderSelf(State state) {
 			auto renderState = state.renderState;
 
 			// render food

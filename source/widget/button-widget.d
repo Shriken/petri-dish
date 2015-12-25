@@ -18,7 +18,7 @@ class ButtonWidget : Widget {
 	}
 
 	override {
-		void render(State state) {
+		void renderSelf(State state) {
 			drawRect(
 				state.renderState,
 				vec2i(0, 0),

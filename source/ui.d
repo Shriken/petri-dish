@@ -109,8 +109,6 @@ class UI {
 	}
 
 	void handleClick(State state, SDL_MouseButtonEvent event) {
-		auto curHeight = -1;
-		Widget curWidget = null;
 		foreach (widget; widgets) {
 			if (
 				widget.offset.x <= event.x &&
@@ -118,16 +116,12 @@ class UI {
 				widget.offset.y <= event.y &&
 				event.y <= widget.offset.y + widget.dimensions.y
 			) {
-				if (widget.height > curHeight) {
-					curWidget = widget;
-					curHeight = curWidget.height;
-				}
+				event.x -= widget.offset.x;
+				event.y -= widget.offset.y;
+				widget.handleClick(state, event);
+				return;
 			}
 		}
-
-		event.x -= curWidget.offset.x;
-		event.y -= curWidget.offset.y;
-		curWidget.handleClick(state, event);
 	}
 
 	void openMenu(MenuWidget menu) {
@@ -137,15 +131,6 @@ class UI {
 
 		currentMenu = menu;
 		widgets ~= menu;
-
-		// push menu to the front
-		auto maxHeight = -1;
-		foreach (widget; widgets) {
-			if (widget.height > maxHeight) {
-				maxHeight = widget.height;
-			}
-		}
-		menu.height = maxHeight + 1;
 	}
 
 	void closeMenu() {
