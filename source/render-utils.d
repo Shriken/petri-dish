@@ -9,6 +9,9 @@ import derelict.sdl2.ttf;
 import misc.transforms;
 import state.render_state;
 
+const auto BLACK = SDL_Color(0, 0, 0, 0);
+const auto WHITE = SDL_Color(0xff, 0xff, 0xff, 0xff);
+
 void setRenderDrawColor(
 	SDL_Renderer *renderer,
 	SDL_Color color,
@@ -39,8 +42,7 @@ void drawText(
 	int x,
 	int y
 ) {
-	auto color = SDL_Color(0xff, 0xff, 0xff, 0xff);
-	auto textTexture = getTextTexture(state, text, font, color);
+	auto textTexture = getTextTexture(state, text, font, WHITE);
 	if (textTexture is null) {
 		writeln(to!string(SDL_GetError()));
 		return;
@@ -70,8 +72,7 @@ void drawTextCentered(
 	int x,
 	int y
 ) {
-	auto color = SDL_Color(0xff, 0xff, 0xff, 0xff);
-	auto textTexture = getTextTexture(state, text, font, color);
+	auto textTexture = getTextTexture(state, text, font, WHITE);
 	if (textTexture is null) {
 		writeln(to!string(SDL_GetError()));
 		return;
