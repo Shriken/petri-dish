@@ -29,29 +29,28 @@ void drawText(
 	int x,
 	int y
 ) {
-	auto color = SDL_Color(0xff, 0xff, 0xff, 0xff);
-	auto textSurface = TTF_RenderText_Solid(font, text.dup.ptr, color);
-	if (textSurface is null) {
-		writeln(to!string(SDL_GetError()));
-		return;
-	}
+	drawText(state, text.dup ~ '\0', font, x, y);
+}
 
-	auto textTexture = SDL_CreateTextureFromSurface(
-		state.renderer,
-		textSurface
-	);
+void drawText(
+	RenderState state,
+	char[] text,
+	TTF_Font *font,
+	int x,
+	int y
+) {
+	auto color = SDL_Color(0xff, 0xff, 0xff, 0xff);
+	auto textTexture = getTextTexture(state, text, font, color);
 	if (textTexture is null) {
 		writeln(to!string(SDL_GetError()));
 		return;
 	}
 
-	SDL_Rect targetLoc;
-	targetLoc.x = x;
-	targetLoc.y = y;
-	targetLoc.w = textSurface.w;
-	targetLoc.h = textSurface.h;
+	int w, h;
+	SDL_QueryTexture(textTexture, null, null, &w, &h);
+	auto targetLoc = SDL_Rect(x, y, w, h);
 	SDL_RenderCopy(state.renderer, textTexture, null, &targetLoc);
-	SDL_FreeSurface(textSurface);
+	SDL_DestroyTexture(textTexture);
 }
 
 void drawTextCentered(
@@ -61,12 +60,42 @@ void drawTextCentered(
 	int x,
 	int y
 ) {
+	drawTextCentered(state, text.dup ~ '\0', font, x, y);
+}
+
+void drawTextCentered(
+	RenderState state,
+	char[] text,
+	TTF_Font *font,
+	int x,
+	int y
+) {
 	auto color = SDL_Color(0xff, 0xff, 0xff, 0xff);
-	auto textSurface = TTF_RenderText_Solid(font, text.dup.ptr, color);
-	if (textSurface is null) {
+	auto textTexture = getTextTexture(state, text, font, color);
+	if (textTexture is null) {
 		writeln(to!string(SDL_GetError()));
 		return;
 	}
+
+	int w, h;
+	SDL_QueryTexture(textTexture, null, null, &w, &h);
+	auto targetLoc = SDL_Rect(x - w / 2, y - h / 2, w, h);
+	SDL_RenderCopy(state.renderer, textTexture, null, &targetLoc);
+	SDL_DestroyTexture(textTexture);
+}
+
+SDL_Texture *getTextTexture(
+	RenderState state,
+	char[] text,
+	TTF_Font *font,
+	SDL_Color color
+) {
+	auto textSurface = TTF_RenderText_Solid(font, text.ptr, color);
+	if (textSurface is null) {
+		writeln(to!string(SDL_GetError()));
+		return null;
+	}
+	scope(exit) SDL_FreeSurface(textSurface);
 
 	auto textTexture = SDL_CreateTextureFromSurface(
 		state.renderer,
@@ -74,16 +103,10 @@ void drawTextCentered(
 	);
 	if (textTexture is null) {
 		writeln(to!string(SDL_GetError()));
-		return;
+		return null;
 	}
 
-	SDL_Rect targetLoc;
-	targetLoc.x = x - textSurface.w / 2;
-	targetLoc.y = y - textSurface.h / 2;
-	targetLoc.w = textSurface.w;
-	targetLoc.h = textSurface.h;
-	SDL_RenderCopy(state.renderer, textTexture, null, &targetLoc);
-	SDL_FreeSurface(textSurface);
+	return textTexture;
 }
 
 void drawRect(Vec_T)(
