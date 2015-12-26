@@ -40,7 +40,7 @@ class ExperimentWidget : Widget {
 			}
 		}
 
-		void handleClick(State state, SDL_MouseButtonEvent event) {
+		void clickHandler(State state, SDL_MouseButtonEvent event) {
 			if (event.type == SDL_MOUSEBUTTONDOWN) {
 				state.simState.addCell(
 					event.x - state.simState.FIELD_RAD,

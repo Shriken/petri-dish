@@ -12,10 +12,6 @@ import widget.button_widget;
 class MenuWidget : Widget {
 	this(vec2i offset, vec2i dimensions) {
 		super(offset, dimensions);
-		foreach (i; 0 .. 3) {
-			children ~= new ButtonWidget("stuff!");
-		}
-		updatePosition(offset, dimensions);
 	}
 
 	override {
@@ -31,7 +27,8 @@ class MenuWidget : Widget {
 			);
 		}
 
-		void handleClick(State state, SDL_MouseButtonEvent event) {}
+		void clickHandler(State state, SDL_MouseButtonEvent event) {}
+
 		void updatePosition(vec2i offset, vec2i dimensions) {
 			this.offset = offset;
 			this.dimensions = dimensions;
@@ -44,9 +41,12 @@ class MenuWidget : Widget {
 			foreach (int i, Widget child; children) {
 				scope(failure) continue;
 				auto button = cast(ButtonWidget)child;
+
+				// update child buttons
 				button.dimensions = vec2i(200, 50);
 				button.offset = baseOffset - button.dimensions / 2;
-				button.offset.y += i * (button.dimensions.y + interButtonSpace);
+				button.offset.y += i *
+					(button.dimensions.y + interButtonSpace);
 			}
 		}
 	}

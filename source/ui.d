@@ -1,12 +1,15 @@
+import std.range;
 import std.algorithm;
 import gfm.math.vector;
 import derelict.sdl2.sdl;
 
 import render_utils;
+import misc.rect;
 import misc.transforms;
 import state.state;
 import widget.widget;
 import widget.menu_widget;
+import widget.main_menu_widget;
 import widget.experiment_widget;
 
 class UI {
@@ -92,9 +95,9 @@ class UI {
 				break;
 
 			case SDLK_ESCAPE:
-				// open menu
+				// open main menu
 				if (currentMenu is null) {
-					openMenu(new MenuWidget(
+					openMenu(new MainMenuWidget(
 						vec2i(0, 0),
 						state.renderState.windowDimensions
 					));
@@ -109,12 +112,13 @@ class UI {
 	}
 
 	void handleClick(State state, SDL_MouseButtonEvent event) {
-		foreach (widget; widgets) {
+		foreach (widget; retro(widgets)) {
 			if (
-				widget.offset.x <= event.x &&
-				event.x <= widget.offset.x + widget.dimensions.x &&
-				widget.offset.y <= event.y &&
-				event.y <= widget.offset.y + widget.dimensions.y
+				pointInRect(
+					vec2i(event.x, event.y),
+					widget.offset,
+					widget.dimensions
+				)
 			) {
 				event.x -= widget.offset.x;
 				event.y -= widget.offset.y;
