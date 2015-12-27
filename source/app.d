@@ -20,7 +20,6 @@ void main(string[] args) {
 	setBasePath(buildNormalizedPath(args[0], ".."));
 
 	auto state = new State();
-	auto ui = new UI(state.renderState.windowDimensions);
 	if (!state.renderState.init()) {
 		writeln("an error occurred initializing the renderer");
 		return;
@@ -41,13 +40,13 @@ void main(string[] args) {
 		// handle event queue
 		SDL_Event event;
 		while (SDL_PollEvent(&event) != 0) {
-			ui.handleEvent(state, event);
+			state.ui.handleEvent(state, event);
 		}
 
 		// update and render
 		if (!state.simState.paused) {
 			update.update(state.simState);
 		}
-		ui.render(state);
+		state.ui.render(state);
 	}
 }

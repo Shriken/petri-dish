@@ -39,14 +39,11 @@ class MenuWidget : Widget {
 			);
 			auto interButtonSpace = 20;
 			foreach (int i, Widget child; children) {
-				scope(failure) continue;
-				auto button = cast(ButtonWidget)child;
-
-				// update child buttons
-				button.dimensions = vec2i(200, 50);
-				button.offset = baseOffset - button.dimensions / 2;
-				button.offset.y += i *
-					(button.dimensions.y + interButtonSpace);
+				// update children positions and dimensions
+				child.dimensions = vec2i(200, 50);
+				child.offset = baseOffset - child.dimensions / 2;
+				child.offset.y += i *
+					(child.dimensions.y + interButtonSpace);
 			}
 		}
 	}
