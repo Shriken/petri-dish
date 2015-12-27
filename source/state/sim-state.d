@@ -13,7 +13,8 @@ class SimulationState {
 	bool running = true;
 	bool paused = false;
 	const double FIELD_RAD = 320;
-	Genome genome;
+	Genome[] genomes;
+	size_t curGenomeIndex = 0;
 	Cell[] cells;
 	Food[] food;
 
@@ -21,9 +22,10 @@ class SimulationState {
 	double foodGenStatus = 0;
 
 	this() {
-		genome = Genome.load(
+		genomes ~= Genome.load(
 			getResourcePath("genomes/simple-swimmers.gnm")
 		);
+		genomes ~= new Genome();
 
 		// spawn starter cells
 		foreach (int i; 0 .. 50) {
@@ -34,6 +36,7 @@ class SimulationState {
 	}
 
 	void addCell(double x, double y) {
+		auto genome = genomes[curGenomeIndex];
 		cells ~= new Cell(x, y, genome, &genome.cellModes[0]);
 	}
 };
