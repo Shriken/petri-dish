@@ -113,13 +113,7 @@ class UI {
 
 	void handleClick(State state, SDL_MouseButtonEvent event) {
 		foreach (widget; retro(widgets)) {
-			if (
-				pointInRect(
-					vec2i(event.x, event.y),
-					widget.offset,
-					widget.dimensions
-				)
-			) {
+			if (widget.containsPoint(event)) {
 				event.x -= widget.offset.x;
 				event.y -= widget.offset.y;
 				widget.handleClick(state, event);

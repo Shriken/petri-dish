@@ -38,13 +38,7 @@ abstract class Widget {
 	/* DO NOT OVERRIDE */
 	void handleClick(State state, SDL_MouseButtonEvent event) {
 		foreach (child; children) {
-			if (
-				pointInRect(
-					vec2i(event.x, event.y),
-					child.offset,
-					child.dimensions
-				)
-			) {
+			if (child.containsPoint(event)) {
 				child.handleClick(state, event);
 				return;
 			}
@@ -58,5 +52,13 @@ abstract class Widget {
 	void updatePosition(vec2i offset, vec2i dimensions) {
 		this.offset = offset;
 		this.dimensions = dimensions;
+	}
+
+	bool containsPoint(Vec_T)(Vec_T point) {
+		return pointInRect(
+			vec2i(point.x, point.y),
+			offset,
+			dimensions
+		);
 	}
 }
