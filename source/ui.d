@@ -15,7 +15,7 @@ import widget.experiment_widget;
 class UI {
 	Widget focus;
 	Widget[] widgets;
-	MenuWidget currentMenu;
+	MenuWidget[] menuStack;
 
 	vec2i dimensions;
 
@@ -96,13 +96,13 @@ class UI {
 
 			case SDLK_ESCAPE:
 				// open main menu
-				if (currentMenu is null) {
-					openMenu(new MainMenuWidget(
+				if (menuStack.length == 0) {
+					pushMenu(new MainMenuWidget(
 						vec2i(0, 0),
 						state.renderState.windowDimensions
 					));
 				} else {
-					closeMenu();
+					popMenu();
 				}
 				break;
 
@@ -128,18 +128,29 @@ class UI {
 		}
 	}
 
-	void openMenu(MenuWidget menu) {
-		if (currentMenu !is null) {
-			closeMenu();
+	void pushMenu(MenuWidget menu) {
+		// disable rendering of existing menu
+		if (menuStack.length > 0) {
+			widgets = widgets.remove(widgets.countUntil(menuStack[$ - 1]));
 		}
 
-		currentMenu = menu;
+		menuStack.assumeSafeAppend() ~= menu;
 		widgets ~= menu;
 	}
 
-	void closeMenu() {
-		assert(currentMenu !is null);
+	MenuWidget popMenu() {
+		assert(menuStack.length > 0);
+
+		// pop and remove from widget list
+		auto currentMenu = menuStack[$ - 1];
+		menuStack.length--;
 		widgets = widgets.remove(widgets.countUntil(currentMenu));
-		currentMenu = null;
+
+		// turn on rendering for next menu in stack
+		if (menuStack.length > 0) {
+			widgets ~= menuStack[$ - 1];
+		}
+
+		return currentMenu;
 	}
 }

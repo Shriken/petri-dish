@@ -40,7 +40,7 @@ class MenuButtonWidget : Widget {
 		}
 
 		void clickHandler(State state, SDL_MouseButtonEvent event) {
-			state.ui.openMenu(menu);
+			state.ui.pushMenu(menu);
 		}
 	}
 }
