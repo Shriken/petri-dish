@@ -17,15 +17,19 @@ class MainMenuWidget : MenuWidget {
 
 		children ~= new ButtonWidget(
 			"<    >",
-			delegate(State state, SDL_MouseButtonEvent event) {
+			delegate(
+				ButtonWidget thisWidget,
+				State state,
+				SDL_MouseButtonEvent event
+			) {
 				auto simState = state.simState;
 				if (
-					event.x < dimensions.x / 2 &&
+					event.x < thisWidget.dimensions.x / 2 &&
 					simState.curGenomeIndex > 0
 				) {
 					simState.curGenomeIndex--;
 				} else if (
-					event.x > dimensions.x / 2 &&
+					event.x > thisWidget.dimensions.x / 2 &&
 					simState.curGenomeIndex < simState.genomes.length - 1
 				) {
 					simState.curGenomeIndex++;
@@ -48,14 +52,22 @@ class MainMenuWidget : MenuWidget {
 
 		children ~= new ButtonWidget(
 			"Back",
-			delegate(State state, SDL_MouseButtonEvent event) {
+			delegate(
+				ButtonWidget thisWidget,
+				State state,
+				SDL_MouseButtonEvent event
+			) {
 				state.ui.popMenu();
 			}
 		);
 
 		children ~= new ButtonWidget(
 			"Quit",
-			delegate(State state, SDL_MouseButtonEvent event) {
+			delegate(
+				ButtonWidget thisWidget,
+				State state,
+				SDL_MouseButtonEvent event
+			) {
 				state.simState.running = false;
 			}
 		);

@@ -10,11 +10,19 @@ import widget.widget;
 class ButtonWidget : Widget {
 	string text;
 	SDL_Color color = SDL_Color(0x20, 0x5a, 0x3a);
-	void delegate(State state, SDL_MouseButtonEvent event) clickFunc;
+	void delegate(
+		ButtonWidget thisWidget,
+		State state,
+		SDL_MouseButtonEvent event
+	) clickFunc;
 
 	this(
 		string text,
-		void delegate(State state, SDL_MouseButtonEvent event) clickFunc
+		void delegate(
+			ButtonWidget thisWidget,
+			State state,
+			SDL_MouseButtonEvent event
+		) clickFunc
 	) {
 		super(vec2i(0, 0), vec2i(0, 0));
 		this.text = text;
@@ -42,7 +50,7 @@ class ButtonWidget : Widget {
 		}
 
 		void clickHandler(State state, SDL_MouseButtonEvent event) {
-			this.clickFunc(state, event);
+			this.clickFunc(this, state, event);
 		}
 	}
 }

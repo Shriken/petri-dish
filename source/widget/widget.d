@@ -19,19 +19,25 @@ abstract class Widget {
 
 	/* DO NOT OVERRIDE */
 	void render(State state) {
+		render(state, vec2i(0, 0));
+	}
+
+	/* DO NOT OVERRIDE */
+	void render(State state, vec2i existingOffset) {
 		renderSelf(state);
-		renderChildren(state);
+		renderChildren(state, existingOffset);
 	}
 
 	void renderSelf(State state);
-	void renderChildren(State state) {
+	void renderChildren(State state, vec2i existingOffset) {
 		foreach (child; children) {
+			auto totalOffset = existingOffset + this.offset;
 			auto clipRect = getRectFromVectors(
-				child.offset,
-				child.offset + child.dimensions
+				totalOffset + child.offset,
+				totalOffset + child.offset + child.dimensions
 			);
 			SDL_RenderSetViewport(state.renderState.renderer, &clipRect);
-			child.render(state);
+			child.render(state, totalOffset);
 		}
 	}
 
@@ -39,6 +45,8 @@ abstract class Widget {
 	void handleClick(State state, SDL_MouseButtonEvent event) {
 		foreach (child; children) {
 			if (child.containsPoint(event)) {
+				event.x -= child.offset.x;
+				event.y -= child.offset.y;
 				child.handleClick(state, event);
 				return;
 			}

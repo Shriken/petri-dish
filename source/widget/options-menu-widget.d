@@ -14,7 +14,11 @@ class OptionsMenuWidget : MenuWidget {
 
 		children ~= new ButtonWidget(
 			"Back",
-			delegate(State state, SDL_MouseButtonEvent event) {
+			delegate(
+				ButtonWidget thisWidget,
+				State state,
+				SDL_MouseButtonEvent event
+			) {
 				state.ui.popMenu();
 			}
 		);
