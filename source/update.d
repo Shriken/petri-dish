@@ -58,7 +58,7 @@ void update(SimulationState state) {
 
 	foreach (cell; parallel(state.cells)) {
 		// update mass
-		cell.mass += cell.massChange;
+		cell.gainMass(cell.massChange);
 		cell.massChange = 0;
 	}
 

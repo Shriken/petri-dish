@@ -26,6 +26,7 @@ class SimulationState {
 			getResourcePath("genomes/simple-swimmers.gnm")
 		);
 		genomes ~= new Genome();
+		genomes[$ - 1].cellModes[0].cellType = CellType.devorocyte;
 
 		// spawn starter cells
 		foreach (int i; 0 .. 50) {

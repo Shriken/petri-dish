@@ -159,12 +159,12 @@ class Cell {
 		auto diffSquared = posDiff.squaredLength();
 		if (diffSquared < radSum ^^ 2) {
 			vel += posDiff / diffSquared;
-		}
 
-		if (mode.cellType is CellType.devorocyte) {
-			// eat other cell
-			massChange += DEVOROCYTE_CONSUMPTION_RATE;
-			otherCell.massChange -= DEVOROCYTE_CONSUMPTION_RATE;
+			if (mode.cellType is CellType.devorocyte) {
+				// eat other cell
+				massChange += DEVOROCYTE_CONSUMPTION_RATE;
+				otherCell.massChange -= DEVOROCYTE_CONSUMPTION_RATE;
+			}
 		}
 	}
 };
