@@ -6,7 +6,6 @@ import derelict.sdl2.sdl;
 import state.state;
 import widget.button_widget;
 import widget.menu_widget;
-import widget.menu_button_widget;
 
 class OptionsMenuWidget : MenuWidget {
 	this(vec2i offset, vec2i dimensions) {

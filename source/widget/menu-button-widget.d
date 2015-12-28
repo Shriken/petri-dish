@@ -1,4 +1,4 @@
-module widget.menu_button_widget;
+module widget.menu_opening_button_widget;
 
 import gfm.math.vector;
 import derelict.sdl2.sdl;
@@ -8,7 +8,7 @@ import state.state;
 import widget.widget;
 import widget.menu_widget;
 
-class MenuButtonWidget : Widget {
+class MenuOpeningButtonWidget : Widget {
 	SDL_Color color = SDL_Color(0x20, 0x5a, 0x3a);
 	MenuWidget menu;
 	string text;

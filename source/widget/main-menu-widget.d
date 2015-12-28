@@ -8,8 +8,8 @@ import state.state;
 import widget.menu_widget;
 import widget.button_widget;
 import widget.display_widget;
-import widget.menu_button_widget;
 import widget.options_menu_widget;
+import widget.menu_opening_button_widget;
 
 class MainMenuWidget : MenuWidget {
 	this(vec2i offset, vec2i dimensions) {
@@ -45,7 +45,7 @@ class MainMenuWidget : MenuWidget {
 			}
 		);
 
-		children ~= new MenuButtonWidget(
+		children ~= new MenuOpeningButtonWidget(
 			"Options",
 			new OptionsMenuWidget(offset, dimensions)
 		);
