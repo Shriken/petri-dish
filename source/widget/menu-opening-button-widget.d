@@ -13,8 +13,8 @@ class MenuOpeningButtonWidget : Widget {
 	MenuWidget menu;
 	string text;
 
-	this(string text, MenuWidget menu) {
-		super(vec2i(0, 0), vec2i(0, 0));
+	this(string text, vec2i dimensions, MenuWidget menu) {
+		super(vec2i(0, 0), dimensions);
 		this.menu = menu;
 		this.text = text;
 	}

@@ -17,7 +17,8 @@ class MainMenuWidget : MenuWidget {
 
 		children ~= new ButtonWidget(
 			"<    >",
-			function(
+			vec2i(200, 50),
+			cast(ClickFunction)function(
 				ButtonWidget thisWidget,
 				State state,
 				SDL_MouseButtonEvent event
@@ -38,6 +39,7 @@ class MainMenuWidget : MenuWidget {
 		);
 
 		children ~= new DisplayWidget(
+			vec2i(200, 50),
 			function(State state) {
 				return (
 					"Genome: " ~ to!string(state.simState.curGenomeIndex)
@@ -47,12 +49,14 @@ class MainMenuWidget : MenuWidget {
 
 		children ~= new MenuOpeningButtonWidget(
 			"Options",
+			vec2i(200, 50),
 			new OptionsMenuWidget(offset, dimensions)
 		);
 
 		children ~= new ButtonWidget(
 			"Back",
-			function(
+			vec2i(200, 50),
+			cast(ClickFunction)function(
 				ButtonWidget thisWidget,
 				State state,
 				SDL_MouseButtonEvent event
@@ -63,7 +67,8 @@ class MainMenuWidget : MenuWidget {
 
 		children ~= new ButtonWidget(
 			"Quit",
-			function(
+			vec2i(200, 50),
+			cast(ClickFunction)function(
 				ButtonWidget thisWidget,
 				State state,
 				SDL_MouseButtonEvent event

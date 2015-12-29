@@ -13,7 +13,8 @@ class OptionsMenuWidget : MenuWidget {
 
 		children ~= new ButtonWidget(
 			"Back",
-			function(
+			vec2i(200, 50),
+			cast(ClickFunction)function(
 				ButtonWidget thisWidget,
 				State state,
 				SDL_MouseButtonEvent event

@@ -23,11 +23,8 @@ class ButtonWidget : Widget {
 
 	this(
 		string text,
-		void function(
-			ButtonWidget thisWidget,
-			State state,
-			SDL_MouseButtonEvent event
-		) clickFunc
+		vec2i dimensions,
+		ClickFunction clickFunc
 	) {
 		super(vec2i(0, 0), vec2i(0, 0));
 		this.text = text;

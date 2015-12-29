@@ -12,9 +12,10 @@ class DisplayWidget : Widget {
 	SDL_Color color = SDL_Color(0x20, 0x20, 0x60);
 
 	this(
+		vec2i dimensions,
 		string function(State state) displayFunc
 	) {
-		super(vec2i(0, 0), vec2i(0, 0));
+		super(vec2i(0, 0), dimensions);
 		this.displayFunc = displayFunc;
 	}
 
