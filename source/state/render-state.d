@@ -68,7 +68,7 @@ class RenderState {
 
 		buttonFont = TTF_OpenFont(
 			getResourcePath("monaco.ttf").dup.ptr,
-			20
+			15
 		);
 		if (debugTextFont is null) {
 			writeln("font not present");

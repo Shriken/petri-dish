@@ -26,7 +26,7 @@ class ButtonWidget : Widget {
 		vec2i dimensions,
 		ClickFunction clickFunc
 	) {
-		super(vec2i(0, 0), vec2i(0, 0));
+		super(vec2i(0, 0), dimensions);
 		this.text = text;
 		this.clickFunc = clickFunc;
 	}

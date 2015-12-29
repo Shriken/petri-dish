@@ -13,7 +13,7 @@ class ButtonDisplayClusterWidget : Widget {
 		vec2i dimensions,
 		ClickFunction leftButtonClickFunc,
 		string function(State state) displayFunc,
-		ClickFunction rightButtonClickFunc
+		ClickFunction rightButtonClickFunc,
 	) {
 		super(vec2i(0, 0), dimensions);
 		auto buttonSize = dimensions;
@@ -21,13 +21,22 @@ class ButtonDisplayClusterWidget : Widget {
 		auto displaySize = dimensions;
 		displaySize.x /= 2;
 
+		// left button
 		children ~= new ButtonWidget("<", buttonSize, leftButtonClickFunc);
-		children ~= new DisplayWidget(displaySize, displayFunc);
-		children ~= new ButtonWidget(
+
+		// display
+		auto display = new DisplayWidget(displaySize, displayFunc);
+		display.offset = vec2i(buttonSize.x, 0);
+		children ~= display;
+
+		// right button
+		auto rightButton = new ButtonWidget(
 			">",
 			buttonSize,
 			rightButtonClickFunc
 		);
+		rightButton.offset = vec2i(buttonSize.x + displaySize.x, 0);
+		children ~= rightButton;
 	}
 
 	override {
