@@ -1,5 +1,6 @@
 module widget.button_widget;
 
+import std.typecons;
 import gfm.math.vector;
 import derelict.sdl2.sdl;
 
@@ -7,18 +8,22 @@ import render_utils;
 import state.state;
 import widget.widget;
 
-class ButtonWidget : Widget {
-	string text;
-	SDL_Color color = SDL_Color(0x20, 0x5a, 0x3a);
-	void delegate(
+alias ClickFunction = Typedef!(
+	void function(
 		ButtonWidget thisWidget,
 		State state,
 		SDL_MouseButtonEvent event
-	) clickFunc;
+	)
+);
+
+class ButtonWidget : Widget {
+	string text;
+	SDL_Color color = SDL_Color(0x20, 0x5a, 0x3a);
+	ClickFunction clickFunc;
 
 	this(
 		string text,
-		void delegate(
+		void function(
 			ButtonWidget thisWidget,
 			State state,
 			SDL_MouseButtonEvent event

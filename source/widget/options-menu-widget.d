@@ -13,7 +13,7 @@ class OptionsMenuWidget : MenuWidget {
 
 		children ~= new ButtonWidget(
 			"Back",
-			delegate(
+			function(
 				ButtonWidget thisWidget,
 				State state,
 				SDL_MouseButtonEvent event

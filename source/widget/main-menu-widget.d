@@ -17,7 +17,7 @@ class MainMenuWidget : MenuWidget {
 
 		children ~= new ButtonWidget(
 			"<    >",
-			delegate(
+			function(
 				ButtonWidget thisWidget,
 				State state,
 				SDL_MouseButtonEvent event
@@ -38,7 +38,7 @@ class MainMenuWidget : MenuWidget {
 		);
 
 		children ~= new DisplayWidget(
-			delegate(State state) {
+			function(State state) {
 				return (
 					"Genome: " ~ to!string(state.simState.curGenomeIndex)
 				);
@@ -52,7 +52,7 @@ class MainMenuWidget : MenuWidget {
 
 		children ~= new ButtonWidget(
 			"Back",
-			delegate(
+			function(
 				ButtonWidget thisWidget,
 				State state,
 				SDL_MouseButtonEvent event
@@ -63,7 +63,7 @@ class MainMenuWidget : MenuWidget {
 
 		children ~= new ButtonWidget(
 			"Quit",
-			delegate(
+			function(
 				ButtonWidget thisWidget,
 				State state,
 				SDL_MouseButtonEvent event

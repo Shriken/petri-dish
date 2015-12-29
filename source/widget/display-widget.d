@@ -8,11 +8,11 @@ import state.state;
 import widget.widget;
 
 class DisplayWidget : Widget {
-	string delegate(State state) displayFunc;
+	string function(State state) displayFunc;
 	SDL_Color color = SDL_Color(0x20, 0x20, 0x60);
 
 	this(
-		string delegate(State state) displayFunc
+		string function(State state) displayFunc
 	) {
 		super(vec2i(0, 0), vec2i(0, 0));
 		this.displayFunc = displayFunc;
