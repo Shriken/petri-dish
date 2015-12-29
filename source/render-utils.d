@@ -6,7 +6,8 @@ import gfm.math.vector;
 import derelict.sdl2.sdl;
 import derelict.sdl2.ttf;
 
-import misc.transforms;
+import misc.rect;
+import misc.coords;
 import state.render_state;
 
 const auto BLACK = SDL_Color(0, 0, 0, 0);
@@ -110,10 +111,10 @@ SDL_Texture *getTextTexture(
 	return textTexture;
 }
 
-void drawRect(Vec_T)(
+void drawRect(
 	RenderState state,
-	Vec_T topLeft,
-	Vec_T dimensions,
+	RenderCoords topLeft,
+	RenderCoords dimensions,
 	SDL_Color color,
 	ubyte alpha,
 ) {
@@ -125,32 +126,29 @@ void drawRect(Vec_T)(
 	SDL_RenderFillRect(state.renderer, &drawRect);
 }
 
-void drawRectWorldCoords(Vec_T)(
+void drawRectWorldCoords(
 	RenderState state,
-	Vec_T topLeft,
-	Vec_T dimensions,
+	WorldCoords topLeft,
+	WorldCoords dimensions,
 	SDL_Color color,
 	ubyte alpha,
 ) {
 	drawRect(
 		state,
-		state.worldToRenderCoords(cast(vec2d)topLeft),
-		dimensions,
+		state.worldToRenderCoords(topLeft),
+		state.worldToRenderDimensions(dimensions),
 		color,
 		alpha
 	);
 }
 
-void drawLine(Vec_T)(
+void drawLine(
 	RenderState state,
-	Vec_T point1,
-	Vec_T point2,
+	RenderCoords point1,
+	RenderCoords point2,
 	SDL_Color color,
 	ubyte alpha,
 ) {
-	point1 = state.worldToRenderCoords(cast(vec2d)point1);
-	point2 = state.worldToRenderCoords(cast(vec2d)point2);
-
 	setRenderDrawColor(state.renderer, color, alpha);
 	SDL_RenderDrawLine(
 		state.renderer,
@@ -161,17 +159,17 @@ void drawLine(Vec_T)(
 	);
 }
 
-void drawLineWorldCoords(Vec_T)(
+void drawLineWorldCoords(
 	RenderState state,
-	Vec_T point1,
-	Vec_T point2,
+	WorldCoords point1,
+	WorldCoords point2,
 	SDL_Color color,
 	ubyte alpha,
 ) {
 	drawLine(
 		state,
-		state.worldToRenderCoords(cast(vec2d)point1),
-		state.worldToRenderCoords(cast(vec2d)point2),
+		state.worldToRenderCoords(point1),
+		state.worldToRenderCoords(point2),
 		color,
 		alpha
 	);

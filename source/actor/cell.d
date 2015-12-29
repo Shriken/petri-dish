@@ -10,6 +10,7 @@ import derelict.sdl2.sdl;
 
 import genome;
 import render_utils;
+import misc.coords;
 import state.render_state;
 
 class Cell {
@@ -18,8 +19,8 @@ class Cell {
 	static const double MAX_MASS = 3.55;
 	static const double DEVOROCYTE_CONSUMPTION_RATE = 0.3;
 
-	Vector!(double, 2) pos;
-	Vector!(double, 2) vel;
+	WorldCoords pos;
+	WorldCoords vel;
 	double mass = 2;
 	double angle = 0;
 	CellMode *mode;
@@ -44,29 +45,29 @@ class Cell {
 	}
 
 	this(double x, double y, Genome genome, CellMode *mode) {
-		this(Vector!(double, 2)(x, y), genome, mode);
+		this(WorldCoords(x, y), genome, mode);
 	}
 
-	this(Vector!(double, 2) pos, Genome genome, CellMode *mode) {
+	this(WorldCoords pos, Genome genome, CellMode *mode) {
 		this.genome = genome;
 		this.mode = mode;
 		this.pos = pos;
-		this.vel = Vector!(double, 2)(0, 0);
+		this.vel = WorldCoords(0, 0);
 		this.angle = uniform(0, 2 * PI);
 	}
 
 	void render(RenderState state) {
 		auto rad = this.rad;
 		state.drawRectWorldCoords(
-			pos - Vector!(double, 2)(rad, rad),
-			Vector!(double, 2)(rad * 2, rad * 2),
+			pos - WorldCoords(rad, rad),
+			WorldCoords(rad * 2, rad * 2),
 			mode.color,
 			0xff
 		);
 
 		// draw adhesin bonds
 		foreach (cell; adhesedCells) {
-			state.drawLine(
+			state.drawLineWorldCoords(
 				pos,
 				cell.pos,
 				SDL_Color(0xff, 0xff, 0xff),

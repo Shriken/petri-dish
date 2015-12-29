@@ -5,6 +5,7 @@ import gfm.math.vector;
 import derelict.sdl2.sdl;
 
 import render_utils;
+import misc.coords;
 import state.state;
 import widget.widget;
 
@@ -23,10 +24,10 @@ class ButtonWidget : Widget {
 
 	this(
 		string text,
-		vec2i dimensions,
+		RenderCoords dimensions,
 		ClickFunction clickFunc
 	) {
-		super(vec2i(0, 0), dimensions);
+		super(RenderCoords(0, 0), dimensions);
 		this.text = text;
 		this.clickFunc = clickFunc;
 	}
@@ -35,7 +36,7 @@ class ButtonWidget : Widget {
 		void renderSelf(State state) {
 			drawRect(
 				state.renderState,
-				vec2i(0, 0),
+				RenderCoords(0, 0),
 				dimensions,
 				color,
 				0xff

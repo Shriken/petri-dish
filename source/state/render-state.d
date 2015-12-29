@@ -5,10 +5,11 @@ import gfm.math.vector;
 import derelict.sdl2.sdl;
 import derelict.sdl2.ttf;
 
+import misc.coords;
 import misc.resources;
 
 class RenderState {
-	vec2i windowDimensions = vec2i(640, 640);
+	RenderCoords windowDimensions = RenderCoords(640, 640);
 	SDL_Window *window = null;
 	SDL_Renderer *renderer = null;
 
@@ -85,6 +86,16 @@ class RenderState {
 	}
 };
 
-vec2d worldToRenderCoords(RenderState state, vec2d point) {
-	return point + state.windowDimensions / 2;
+RenderCoords worldToRenderCoords(RenderState state, WorldCoords point) {
+	return RenderCoords(
+		cast(int)point.x,
+		cast(int)point.y
+	) + state.windowDimensions / 2;
+}
+
+RenderCoords worldToRenderDimensions(
+	RenderState state,
+	WorldCoords dimensions
+) {
+	return RenderCoords(cast(int)dimensions.x, cast(int)dimensions.y);
 }

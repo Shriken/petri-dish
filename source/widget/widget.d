@@ -4,32 +4,32 @@ import gfm.math.vector;
 import derelict.sdl2.sdl;
 
 import misc.rect;
-import misc.transforms;
+import misc.coords;
 import state.state;
 
 abstract class Widget {
 	Widget[] children;
 
-	vec2i offset;
-	vec2i dimensions;
+	RenderCoords offset;
+	RenderCoords dimensions;
 
-	this(vec2i offset, vec2i dimensions) {
+	this(RenderCoords offset, RenderCoords dimensions) {
 		updatePosition(offset, dimensions);
 	}
 
 	/* DO NOT OVERRIDE */
 	void render(State state) {
-		render(state, vec2i(0, 0));
+		render(state, RenderCoords(0, 0));
 	}
 
 	/* DO NOT OVERRIDE */
-	void render(State state, vec2i existingOffset) {
+	void render(State state, RenderCoords existingOffset) {
 		renderSelf(state);
 		renderChildren(state, existingOffset);
 	}
 
 	void renderSelf(State state);
-	void renderChildren(State state, vec2i existingOffset) {
+	void renderChildren(State state, RenderCoords existingOffset) {
 		foreach (child; children) {
 			auto totalOffset = existingOffset + this.offset;
 			auto clipRect = getRectFromVectors(
@@ -57,14 +57,14 @@ abstract class Widget {
 
 	void clickHandler(State state, SDL_MouseButtonEvent event);
 
-	void updatePosition(vec2i offset, vec2i dimensions) {
+	void updatePosition(RenderCoords offset, RenderCoords dimensions) {
 		this.offset = offset;
 		this.dimensions = dimensions;
 	}
 
 	bool containsPoint(Vec_T)(Vec_T point) {
 		return pointInRect(
-			vec2i(point.x, point.y),
+			RenderCoords(point.x, point.y),
 			offset,
 			dimensions
 		);

@@ -4,6 +4,7 @@ import gfm.math.vector;
 import derelict.sdl2.sdl;
 
 import render_utils;
+import misc.coords;
 import state.state;
 import widget.widget;
 
@@ -12,10 +13,10 @@ class DisplayWidget : Widget {
 	SDL_Color color = SDL_Color(0x20, 0x20, 0x60);
 
 	this(
-		vec2i dimensions,
+		RenderCoords dimensions,
 		string function(State state) displayFunc
 	) {
-		super(vec2i(0, 0), dimensions);
+		super(RenderCoords(0, 0), dimensions);
 		this.displayFunc = displayFunc;
 	}
 
@@ -23,7 +24,7 @@ class DisplayWidget : Widget {
 		void renderSelf(State state) {
 			drawRect(
 				state.renderState,
-				vec2i(0, 0),
+				RenderCoords(0, 0),
 				dimensions,
 				color,
 				0xff

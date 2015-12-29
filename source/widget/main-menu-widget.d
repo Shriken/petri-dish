@@ -4,6 +4,7 @@ import std.conv;
 import gfm.math.vector;
 import derelict.sdl2.sdl;
 
+import misc.coords;
 import state.state;
 import widget.menu_widget;
 import widget.button_widget;
@@ -13,11 +14,11 @@ import widget.menu_opening_button_widget;
 import widget.button_display_cluster_widget;
 
 class MainMenuWidget : MenuWidget {
-	this(vec2i offset, vec2i dimensions) {
+	this(RenderCoords offset, RenderCoords dimensions) {
 		super(offset, dimensions);
 
 		children ~= new ButtonDisplayClusterWidget(
-			vec2i(200, 50),
+			RenderCoords(200, 50),
 			cast(ClickFunction)function(
 				ButtonWidget thisWidget,
 				State state,
@@ -26,7 +27,9 @@ class MainMenuWidget : MenuWidget {
 				state.simState.curGenomeIndex--;
 			},
 			function(State state) {
-				return "Genome: " ~ to!string(state.simState.curGenomeIndex);
+				return (
+					"Genome: " ~ to!string(state.simState.curGenomeIndex)
+				);
 			},
 			cast(ClickFunction)function(
 				ButtonWidget thisWidget,
@@ -39,13 +42,13 @@ class MainMenuWidget : MenuWidget {
 
 		children ~= new MenuOpeningButtonWidget(
 			"Options",
-			vec2i(200, 50),
+			RenderCoords(200, 50),
 			new OptionsMenuWidget(offset, dimensions)
 		);
 
 		children ~= new ButtonWidget(
 			"Back",
-			vec2i(200, 50),
+			RenderCoords(200, 50),
 			cast(ClickFunction)function(
 				ButtonWidget thisWidget,
 				State state,
@@ -57,7 +60,7 @@ class MainMenuWidget : MenuWidget {
 
 		children ~= new ButtonWidget(
 			"Quit",
-			vec2i(200, 50),
+			RenderCoords(200, 50),
 			cast(ClickFunction)function(
 				ButtonWidget thisWidget,
 				State state,

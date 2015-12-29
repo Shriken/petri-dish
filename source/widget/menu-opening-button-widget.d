@@ -4,6 +4,7 @@ import gfm.math.vector;
 import derelict.sdl2.sdl;
 
 import render_utils;
+import misc.coords;
 import state.state;
 import widget.widget;
 import widget.menu_widget;
@@ -13,8 +14,8 @@ class MenuOpeningButtonWidget : Widget {
 	MenuWidget menu;
 	string text;
 
-	this(string text, vec2i dimensions, MenuWidget menu) {
-		super(vec2i(0, 0), dimensions);
+	this(string text, RenderCoords dimensions, MenuWidget menu) {
+		super(RenderCoords(0, 0), dimensions);
 		this.menu = menu;
 		this.text = text;
 	}
@@ -23,7 +24,7 @@ class MenuOpeningButtonWidget : Widget {
 		void renderSelf(State state) {
 			drawRect(
 				state.renderState,
-				vec2i(0, 0),
+				RenderCoords(0, 0),
 				dimensions,
 				color,
 				0xff

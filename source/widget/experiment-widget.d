@@ -5,6 +5,7 @@ import gfm.math.vector;
 import derelict.sdl2.sdl;
 
 import render_utils;
+import misc.coords;
 import actor.cell;
 import actor.food;
 import state.state;
@@ -16,7 +17,7 @@ import widget.widget;
  * Can't think of a better name right now
  */
 class ExperimentWidget : Widget {
-	this(vec2i offset, vec2i dimensions) {
+	this(RenderCoords offset, RenderCoords dimensions) {
 		super(offset, dimensions);
 	}
 

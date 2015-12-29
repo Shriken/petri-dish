@@ -5,7 +5,7 @@ import derelict.sdl2.sdl;
 
 import render_utils;
 import misc.rect;
-import misc.transforms;
+import misc.coords;
 import state.state;
 import widget.widget;
 import widget.menu_widget;
@@ -17,11 +17,14 @@ class UI {
 	Widget[] widgets;
 	MenuWidget[] menuStack;
 
-	vec2i dimensions;
+	RenderCoords dimensions;
 
-	this(vec2i dimensions) {
+	this(RenderCoords dimensions) {
 		this.dimensions = dimensions;
-		this.widgets ~= new ExperimentWidget(vec2i(0, 0), dimensions);
+		this.widgets ~= new ExperimentWidget(
+			RenderCoords(0, 0),
+			dimensions
+		);
 	}
 
 	void render(State state) {
@@ -97,10 +100,12 @@ class UI {
 			case SDLK_ESCAPE:
 				// open main menu
 				if (menuStack.length == 0) {
-					pushMenu(new MainMenuWidget(
-						vec2i(0, 0),
-						state.renderState.windowDimensions
-					));
+					pushMenu(
+						new MainMenuWidget(
+							RenderCoords(0, 0),
+							state.renderState.windowDimensions
+						)
+					);
 				} else {
 					popMenu();
 				}

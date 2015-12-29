@@ -3,6 +3,7 @@ module widget.button_display_cluster_widget;
 import gfm.math.vector;
 import derelict.sdl2.sdl;
 
+import misc.coords;
 import state.state;
 import widget.widget;
 import widget.button_widget;
@@ -10,12 +11,12 @@ import widget.display_widget;
 
 class ButtonDisplayClusterWidget : Widget {
 	this(
-		vec2i dimensions,
+		RenderCoords dimensions,
 		ClickFunction leftButtonClickFunc,
 		string function(State state) displayFunc,
 		ClickFunction rightButtonClickFunc,
 	) {
-		super(vec2i(0, 0), dimensions);
+		super(RenderCoords(0, 0), dimensions);
 		auto buttonSize = dimensions;
 		buttonSize.x /= 4;
 		auto displaySize = dimensions;
@@ -26,7 +27,7 @@ class ButtonDisplayClusterWidget : Widget {
 
 		// display
 		auto display = new DisplayWidget(displaySize, displayFunc);
-		display.offset = vec2i(buttonSize.x, 0);
+		display.offset = RenderCoords(buttonSize.x, 0);
 		children ~= display;
 
 		// right button
@@ -35,7 +36,10 @@ class ButtonDisplayClusterWidget : Widget {
 			buttonSize,
 			rightButtonClickFunc
 		);
-		rightButton.offset = vec2i(buttonSize.x + displaySize.x, 0);
+		rightButton.offset = RenderCoords(
+			buttonSize.x + displaySize.x,
+			0
+		);
 		children ~= rightButton;
 	}
 
