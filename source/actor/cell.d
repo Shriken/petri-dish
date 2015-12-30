@@ -150,7 +150,11 @@ class Cell {
 	}
 
 	double massConsumption() {
-		return 0.003;
+		if (mode.cellType is CellType.flagellocyte) {
+			return 0.003;
+		}
+
+		return 0.001;
 	}
 
 	void collide(Cell otherCell) {
@@ -161,7 +165,10 @@ class Cell {
 		if (diffSquared < radSum ^^ 2) {
 			vel += posDiff / diffSquared;
 
-			if (mode.cellType is CellType.devorocyte) {
+			if (
+				mode.cellType is CellType.devorocyte &&
+				otherCell.mode.cellType !is CellType.devorocyte
+			) {
 				// eat other cell
 				massChange += DEVOROCYTE_CONSUMPTION_RATE;
 				otherCell.massChange -= DEVOROCYTE_CONSUMPTION_RATE;
