@@ -17,6 +17,10 @@ import widget.widget;
  * Can't think of a better name right now
  */
 class ExperimentWidget : Widget {
+	// state for panning and zooming
+	WorldCoords centerPoint = WorldCoords(0, 0);
+	double zoomLevel = 1;
+
 	this(RenderCoords offset, RenderCoords dimensions) {
 		super(offset, dimensions);
 	}
@@ -24,6 +28,9 @@ class ExperimentWidget : Widget {
 	override {
 		void renderSelf(State state) {
 			auto renderState = state.renderState;
+
+			auto scale = renderState.scale * zoomLevel;
+			SDL_RenderSetScale(renderState.renderer, scale, scale);
 
 			// render food
 			foreach (food; state.simState.food) {
@@ -39,6 +46,12 @@ class ExperimentWidget : Widget {
 			if (renderState.debugRender) {
 				debugRender(state);
 			}
+
+			SDL_RenderSetScale(
+				renderState.renderer,
+				renderState.scale,
+				renderState.scale
+			);
 		}
 
 		void clickHandler(State state, SDL_MouseButtonEvent event) {

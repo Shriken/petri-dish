@@ -16,7 +16,7 @@ class RenderState {
 	bool debugRender = true;
 	TTF_Font *debugTextFont;
 	TTF_Font *buttonFont;
-	vec2d scale = vec2d(1, 1);
+	double scale = 1;
 
 	bool init() {
 		// set up SDL
@@ -42,12 +42,14 @@ class RenderState {
 		// determine the scale we're working at
 		int x, y;
 		SDL_GL_GetDrawableSize(window, &x, &y);
-		scale.x = 1. * x / windowDimensions.x;
-		scale.y = 1. * y / windowDimensions.y;
+		auto xScale = 1. * x / windowDimensions.x;
+		auto yScale = 1. * y / windowDimensions.y;
+		assert(xScale == yScale);
+		scale = xScale;
 
 		// initialize the renderer
 		renderer = SDL_CreateRenderer(window, -1, 0);
-		SDL_RenderSetScale(renderer, scale.x, scale.y);
+		SDL_RenderSetScale(renderer, scale, scale);
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
 		// set up sdl_ttf

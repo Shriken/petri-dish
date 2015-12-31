@@ -154,7 +154,7 @@ class Cell {
 			return 0.003;
 		}
 
-		return 0.001;
+		return 0.002;
 	}
 
 	void collide(Cell otherCell) {
