@@ -41,7 +41,6 @@ class MenuWidget : Widget {
 			auto interButtonSpace = 20;
 			foreach (int i, Widget child; children) {
 				// update children positions and dimensions
-				child.dimensions = RenderCoords(200, 50);
 				child.offset = baseOffset - child.dimensions / 2;
 				child.offset.y += i *
 					(child.dimensions.y + interButtonSpace);

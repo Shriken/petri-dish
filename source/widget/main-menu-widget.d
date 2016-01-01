@@ -13,12 +13,14 @@ import widget.options_menu_widget;
 import widget.menu_opening_button_widget;
 import widget.button_display_cluster_widget;
 
+const RenderCoords MENU_BUTTON_SIZE = RenderCoords(200, 35);
+
 class MainMenuWidget : MenuWidget {
 	this(RenderCoords offset, RenderCoords dimensions) {
 		super(offset, dimensions);
 
 		children ~= new ButtonDisplayClusterWidget(
-			RenderCoords(200, 50),
+			MENU_BUTTON_SIZE,
 			cast(ClickFunction)function(
 				ButtonWidget thisWidget,
 				State state,
@@ -42,13 +44,13 @@ class MainMenuWidget : MenuWidget {
 
 		children ~= new MenuOpeningButtonWidget(
 			"Options",
-			RenderCoords(200, 50),
+			MENU_BUTTON_SIZE,
 			new OptionsMenuWidget(offset, dimensions)
 		);
 
 		children ~= new ButtonWidget(
 			"Back",
-			RenderCoords(200, 50),
+			MENU_BUTTON_SIZE,
 			cast(ClickFunction)function(
 				ButtonWidget thisWidget,
 				State state,
@@ -60,7 +62,7 @@ class MainMenuWidget : MenuWidget {
 
 		children ~= new ButtonWidget(
 			"Quit",
-			RenderCoords(200, 50),
+			MENU_BUTTON_SIZE,
 			cast(ClickFunction)function(
 				ButtonWidget thisWidget,
 				State state,
