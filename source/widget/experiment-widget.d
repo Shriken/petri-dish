@@ -65,6 +65,9 @@ class ExperimentWidget : Widget {
 
 		void scrollHandler(State state, SDL_MouseWheelEvent event) {
 			zoomLevel *= 1.01 ^^ event.y;
+			if (zoomLevel < 1) {
+				zoomLevel = 1;
+			}
 		}
 	}
 

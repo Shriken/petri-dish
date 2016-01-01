@@ -134,11 +134,14 @@ class UI {
 	void pushMenu(MenuWidget menu) {
 		// disable rendering of existing menu
 		if (menuStack.length > 0) {
-			widgets = widgets.remove(widgets.countUntil(menuStack[$ - 1]));
+			widgets = widgets.remove(
+				widgets.countUntil(menuStack[$ - 1])
+			);
 		}
 
 		menuStack.assumeSafeAppend() ~= menu;
 		widgets ~= menu;
+		focus = menu;
 	}
 
 	MenuWidget popMenu() {
@@ -147,7 +150,7 @@ class UI {
 		// pop and remove from widget list
 		auto currentMenu = menuStack[$ - 1];
 		menuStack.length--;
-		widgets = widgets.remove(widgets.countUntil(currentMenu));
+		removeWidget(currentMenu);
 
 		// turn on rendering for next menu in stack
 		if (menuStack.length > 0) {
