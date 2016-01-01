@@ -42,6 +42,20 @@ abstract class Widget {
 	}
 
 	/* DO NOT OVERRIDE */
+	void handleEvent(State state, SDL_Event event) {
+		switch (event.type) {
+			case SDL_MOUSEBUTTONDOWN:
+				handleClick(state, event.button);
+				break;
+			case SDL_MOUSEWHEEL:
+				scrollHandler(state, event.wheel);
+				break;
+			default:
+				break;
+		}
+	}
+
+	/* DO NOT OVERRIDE */
 	void handleClick(State state, SDL_MouseButtonEvent event) {
 		foreach (child; children) {
 			if (child.containsPoint(event)) {
@@ -56,6 +70,7 @@ abstract class Widget {
 	}
 
 	void clickHandler(State state, SDL_MouseButtonEvent event);
+	void scrollHandler(State state, SDL_MouseWheelEvent event) {}
 
 	void updatePosition(RenderCoords offset, RenderCoords dimensions) {
 		this.offset = offset;

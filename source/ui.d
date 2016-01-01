@@ -13,7 +13,8 @@ import widget.main_menu_widget;
 import widget.experiment_widget;
 
 class UI {
-	Widget focus;
+	private Widget focus;
+
 	Widget[] widgets;
 	MenuWidget[] menuStack;
 
@@ -74,6 +75,7 @@ class UI {
 				handleClick(state, event.button);
 				break;
 			default:
+				focusedWidget.handleEvent(state, event);
 				break;
 		}
 	}
@@ -121,6 +123,8 @@ class UI {
 			if (widget.containsPoint(event)) {
 				event.x -= widget.offset.x;
 				event.y -= widget.offset.y;
+
+				focus = widget;
 				widget.handleClick(state, event);
 				return;
 			}

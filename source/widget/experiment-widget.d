@@ -42,16 +42,16 @@ class ExperimentWidget : Widget {
 				cell.render(renderState);
 			}
 
-			// debug rendering
-			if (renderState.debugRender) {
-				debugRender(state);
-			}
-
 			SDL_RenderSetScale(
 				renderState.renderer,
 				renderState.scale,
 				renderState.scale
 			);
+
+			// debug rendering
+			if (renderState.debugRender) {
+				debugRender(state);
+			}
 		}
 
 		void clickHandler(State state, SDL_MouseButtonEvent event) {
@@ -61,6 +61,10 @@ class ExperimentWidget : Widget {
 					event.y - state.simState.FIELD_RAD
 				);
 			}
+		}
+
+		void scrollHandler(State state, SDL_MouseWheelEvent event) {
+			zoomLevel *= 1.01 ^^ event.y;
 		}
 	}
 
