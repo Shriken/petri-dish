@@ -33,7 +33,7 @@ void drawText(
 	int x,
 	int y
 ) {
-	drawText(state, text.dup ~ '\0', font, x, y);
+	state.drawText(text.dup ~ '\0', font, x, y);
 }
 
 void drawText(
@@ -43,7 +43,7 @@ void drawText(
 	int x,
 	int y
 ) {
-	auto textTexture = getTextTexture(state, text, font, WHITE);
+	auto textTexture = state.getTextTexture(text, font, WHITE);
 	if (textTexture is null) {
 		writeln(to!string(SDL_GetError()));
 		return;
@@ -63,7 +63,7 @@ void drawTextCentered(
 	int x,
 	int y
 ) {
-	drawTextCentered(state, text.dup ~ '\0', font, x, y);
+	state.drawTextCentered(text.dup ~ '\0', font, x, y);
 }
 
 void drawTextCentered(
@@ -73,7 +73,7 @@ void drawTextCentered(
 	int x,
 	int y
 ) {
-	auto textTexture = getTextTexture(state, text, font, WHITE);
+	auto textTexture = state.getTextTexture(text, font, WHITE);
 	if (textTexture is null) {
 		writeln(to!string(SDL_GetError()));
 		return;
@@ -133,8 +133,7 @@ void drawRectWorldCoords(
 	SDL_Color color,
 	ubyte alpha,
 ) {
-	drawRect(
-		state,
+	state.drawRect(
 		state.worldToRenderCoords(topLeft),
 		state.worldToRenderDimensions(dimensions),
 		color,
@@ -166,8 +165,7 @@ void drawLineWorldCoords(
 	SDL_Color color,
 	ubyte alpha,
 ) {
-	drawLine(
-		state,
+	state.drawLine(
 		state.worldToRenderCoords(point1),
 		state.worldToRenderCoords(point2),
 		color,

@@ -73,8 +73,7 @@ class ExperimentWidget : Widget {
 
 	void debugRender(State state) {
 		// draw fps in top left
-		drawText(
-			state.renderState,
+		state.renderState.drawText(
 			to!string(state.fps),
 			state.renderState.debugTextFont,
 			0, 0
