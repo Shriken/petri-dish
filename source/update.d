@@ -41,7 +41,9 @@ void update(SimulationState state) {
 			cell.shouldDie = true;
 		} else if (cell.mass >= cell.mode.splitThreshold) {
 			// reproduce
-			newCells ~= cell.reproduce();
+			synchronized {
+				newCells ~= cell.reproduce();
+			}
 		}
 
 		// consume mass through existence
