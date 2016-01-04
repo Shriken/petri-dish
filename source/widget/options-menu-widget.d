@@ -8,13 +8,15 @@ import state.state;
 import widget.button_widget;
 import widget.menu_widget;
 
+const RenderCoords MENU_BUTTON_SIZE = RenderCoords(200, 35);
+
 class OptionsMenuWidget : MenuWidget {
 	this(RenderCoords offset, RenderCoords dimensions) {
 		super(offset, dimensions);
 
 		children ~= new ButtonWidget(
 			"Back",
-			RenderCoords(200, 50),
+			MENU_BUTTON_SIZE,
 			cast(ClickFunction)function(
 				ButtonWidget thisWidget,
 				State state,

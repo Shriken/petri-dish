@@ -57,7 +57,6 @@ class Cell {
 	}
 
 	void render(RenderState state) {
-		auto rad = this.rad;
 		state.drawRectWorldCoords(
 			pos - WorldCoords(rad, rad),
 			WorldCoords(rad * 2, rad * 2),
@@ -77,9 +76,8 @@ class Cell {
 	}
 
 	Cell reproduce() {
-		massChange -= mass / 2;
-
 		auto oldMode = mode;
+		massChange -= mass / 2;
 
 		// child 2
 		Cell newCell = new Cell(this);
