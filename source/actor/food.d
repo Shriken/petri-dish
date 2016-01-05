@@ -6,6 +6,7 @@ import derelict.sdl2.sdl;
 import render_utils;
 import misc.coords;
 import state.render_state;
+import widget.experiment_render_utils;
 
 class Food {
 	static const int MAX_AGE = 60 * 10;
@@ -20,8 +21,8 @@ class Food {
 		pos = WorldCoords(x, y);
 	}
 
-	void render(RenderState state) {
-		state.drawRectWorldCoords(
+	void render(ExperimentRenderState state) {
+		state.drawRect(
 			pos - WorldCoords(rad, rad),
 			WorldCoords(rad * 2, rad * 2),
 			SDL_Color(0x96, 0x4b, 0x00),

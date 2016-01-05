@@ -126,21 +126,6 @@ void drawRect(
 	SDL_RenderFillRect(state.renderer, &drawRect);
 }
 
-void drawRectWorldCoords(
-	RenderState state,
-	WorldCoords topLeft,
-	WorldCoords dimensions,
-	SDL_Color color,
-	ubyte alpha,
-) {
-	state.drawRect(
-		state.worldToRenderCoords(topLeft),
-		state.worldToRenderDimensions(dimensions),
-		color,
-		alpha
-	);
-}
-
 void drawLine(
 	RenderState state,
 	RenderCoords point1,
@@ -155,20 +140,5 @@ void drawLine(
 		cast(int)point1.y,
 		cast(int)point2.x,
 		cast(int)point2.y
-	);
-}
-
-void drawLineWorldCoords(
-	RenderState state,
-	WorldCoords point1,
-	WorldCoords point2,
-	SDL_Color color,
-	ubyte alpha,
-) {
-	state.drawLine(
-		state.worldToRenderCoords(point1),
-		state.worldToRenderCoords(point2),
-		color,
-		alpha
 	);
 }

@@ -87,17 +87,3 @@ class RenderState {
 		SDL_Quit();
 	}
 };
-
-RenderCoords worldToRenderCoords(RenderState state, WorldCoords point) {
-	return RenderCoords(
-		cast(int)point.x,
-		cast(int)point.y
-	) + state.windowDimensions / 2;
-}
-
-RenderCoords worldToRenderDimensions(
-	RenderState state,
-	WorldCoords dimensions
-) {
-	return RenderCoords(cast(int)dimensions.x, cast(int)dimensions.y);
-}

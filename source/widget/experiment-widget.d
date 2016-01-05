@@ -1,7 +1,6 @@
 module widget.experiment_widget;
 
 import std.conv;
-import gfm.math.vector;
 import derelict.sdl2.sdl;
 
 import render_utils;
@@ -11,26 +10,23 @@ import actor.food;
 import state.state;
 import state.render_state;
 import widget.widget;
+import widget.experiment_render_utils;
 
 /**
  * Widget that displays an experiment
  * Can't think of a better name right now
  */
 class ExperimentWidget : Widget {
-	// state for panning and zooming
-	WorldCoords centerPoint = WorldCoords(0, 0);
-	double zoomLevel = 1;
+	ExperimentRenderState renderState;
 
 	this(RenderCoords offset, RenderCoords dimensions) {
 		super(offset, dimensions);
+		this.renderState = ExperimentRenderState(this);
 	}
 
 	override {
 		void renderSelf(State state) {
-			auto renderState = state.renderState;
-
-			auto scale = renderState.scale * zoomLevel;
-			SDL_RenderSetScale(renderState.renderer, scale, scale);
+			renderState.globalState = state.renderState;
 
 			// render food
 			foreach (food; state.simState.food) {
@@ -42,14 +38,8 @@ class ExperimentWidget : Widget {
 				cell.render(renderState);
 			}
 
-			SDL_RenderSetScale(
-				renderState.renderer,
-				renderState.scale,
-				renderState.scale
-			);
-
 			// debug rendering
-			if (renderState.debugRender) {
+			if (state.renderState.debugRender) {
 				debugRender(state);
 			}
 		}
@@ -64,9 +54,9 @@ class ExperimentWidget : Widget {
 		}
 
 		void scrollHandler(State state, SDL_MouseWheelEvent event) {
-			zoomLevel *= 1.01 ^^ event.y;
-			if (zoomLevel < 1) {
-				zoomLevel = 1;
+			renderState.zoomLevel *= 1.01 ^^ event.y;
+			if (renderState.zoomLevel < 1) {
+				renderState.zoomLevel = 1;
 			}
 		}
 	}

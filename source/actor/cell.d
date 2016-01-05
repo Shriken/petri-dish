@@ -9,9 +9,9 @@ import gfm.math.vector;
 import derelict.sdl2.sdl;
 
 import genome;
-import render_utils;
 import misc.coords;
 import state.render_state;
+import widget.experiment_render_utils;
 
 class Cell {
 	static const double RAD_PER_MASS = 2;
@@ -56,8 +56,8 @@ class Cell {
 		this.angle = uniform(0, 2 * PI);
 	}
 
-	void render(RenderState state) {
-		state.drawRectWorldCoords(
+	void render(ref ExperimentRenderState state) {
+		state.drawRect(
 			pos - WorldCoords(rad, rad),
 			WorldCoords(rad * 2, rad * 2),
 			mode.color,
@@ -66,7 +66,7 @@ class Cell {
 
 		// draw adhesin bonds
 		foreach (cell; adhesedCells) {
-			state.drawLineWorldCoords(
+			state.drawLine(
 				pos,
 				cell.pos,
 				SDL_Color(0xff, 0xff, 0xff),
