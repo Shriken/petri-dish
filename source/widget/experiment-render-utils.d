@@ -64,7 +64,7 @@ void drawLine(
 	SDL_Color color,
 	ubyte alpha
 ) {
-	render_utils.drawRect(
+	render_utils.drawLine(
 		state.globalState,
 		state.worldToRenderCoords(point1),
 		state.worldToRenderCoords(point2),
