@@ -55,10 +55,9 @@ class ExperimentWidget : Widget {
 
 		void clickHandler(State state, SDL_MouseButtonEvent event) {
 			if (event.type == SDL_MOUSEBUTTONDOWN) {
-				state.simState.addCell(
-					event.x - state.simState.FIELD_RAD,
-					event.y - state.simState.FIELD_RAD
-				);
+				auto renderPoint = RenderCoords(event.x, event.y);
+				auto point = renderState.renderToWorldCoords(renderPoint);
+				state.simState.addCell(point.x, point.y);
 			}
 		}
 

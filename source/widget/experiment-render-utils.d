@@ -38,12 +38,27 @@ RenderCoords worldToRenderCoords(
 	);
 }
 
+WorldCoords renderToWorldCoords(
+	ExperimentRenderState state,
+	RenderCoords point
+) {
+	auto worldPoint = WorldCoords(point - state.widgetDimensions / 2);
+	return worldPoint / state.zoomLevel + state.centerPoint;
+}
+
 RenderCoords worldToRenderDimensions(
 	ExperimentRenderState state,
 	WorldCoords dimensions
 ) {
 	dimensions *= state.zoomLevel;
 	return RenderCoords(cast(int)dimensions.x, cast(int)dimensions.y);
+}
+
+WorldCoords renderToWorldDimensions(
+	ExperimentRenderState state,
+	RenderCoords dimensions
+) {
+	return WorldCoords(dimensions) / state.zoomLevel;
 }
 
 void drawRect(
