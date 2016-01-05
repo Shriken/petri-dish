@@ -118,12 +118,27 @@ void drawRect(
 	SDL_Color color,
 	ubyte alpha,
 ) {
-	auto drawRect = getRectFromVectors(
+	auto targetRect = getRectFromVectors(
 		topLeft,
 		topLeft + dimensions
 	);
 	setRenderDrawColor(state.renderer, color, alpha);
-	SDL_RenderFillRect(state.renderer, &drawRect);
+	SDL_RenderDrawRect(state.renderer, &targetRect);
+}
+
+void fillRect(
+	RenderState state,
+	RenderCoords topLeft,
+	RenderCoords dimensions,
+	SDL_Color color,
+	ubyte alpha,
+) {
+	auto targetRect = getRectFromVectors(
+		topLeft,
+		topLeft + dimensions
+	);
+	setRenderDrawColor(state.renderer, color, alpha);
+	SDL_RenderFillRect(state.renderer, &targetRect);
 }
 
 void drawLine(

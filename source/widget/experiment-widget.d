@@ -3,7 +3,7 @@ module widget.experiment_widget;
 import std.conv;
 import derelict.sdl2.sdl;
 
-import render_utils;
+static import render_utils;
 import misc.coords;
 import actor.cell;
 import actor.food;
@@ -38,6 +38,15 @@ class ExperimentWidget : Widget {
 				cell.render(renderState);
 			}
 
+			// draw boundaries
+			auto experimentRad = state.simState.FIELD_RAD;
+			renderState.drawRect(
+				WorldCoords(-experimentRad, -experimentRad),
+				WorldCoords(2 * experimentRad, 2 * experimentRad),
+				render_utils.WHITE,
+				0xff,
+			);
+
 			// debug rendering
 			if (state.renderState.debugRender) {
 				debugRender(state);
@@ -55,15 +64,16 @@ class ExperimentWidget : Widget {
 
 		void scrollHandler(State state, SDL_MouseWheelEvent event) {
 			renderState.zoomLevel *= 1.01 ^^ event.y;
-			if (renderState.zoomLevel < 1) {
-				renderState.zoomLevel = 1;
+			if (renderState.zoomLevel < 0.8) {
+				renderState.zoomLevel = 0.8;
 			}
 		}
 	}
 
 	void debugRender(State state) {
 		// draw fps in top left
-		state.renderState.drawText(
+		render_utils.drawText(
+			state.renderState,
 			to!string(state.fps),
 			state.renderState.debugTextFont,
 			0, 0

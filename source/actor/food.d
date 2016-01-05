@@ -22,7 +22,7 @@ class Food {
 	}
 
 	void render(ExperimentRenderState state) {
-		state.drawRect(
+		state.fillRect(
 			pos - WorldCoords(rad, rad),
 			WorldCoords(rad * 2, rad * 2),
 			SDL_Color(0x96, 0x4b, 0x00),

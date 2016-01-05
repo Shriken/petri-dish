@@ -19,7 +19,7 @@ class MenuWidget : Widget {
 		void renderSelf(State state) {
 			auto renderState = state.renderState;
 
-			drawRect(
+			fillRect(
 				renderState,
 				RenderCoords(0, 0),
 				dimensions,

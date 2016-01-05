@@ -62,6 +62,22 @@ void drawRect(
 	);
 }
 
+void fillRect(
+	ExperimentRenderState state,
+	WorldCoords topLeft,
+	WorldCoords dimensions,
+	SDL_Color color,
+	ubyte alpha
+) {
+	render_utils.fillRect(
+		state.globalState,
+		state.worldToRenderCoords(topLeft),
+		state.worldToRenderDimensions(dimensions),
+		color,
+		alpha
+	);
+}
+
 void drawLine(
 	ExperimentRenderState state,
 	WorldCoords point1,
@@ -76,4 +92,7 @@ void drawLine(
 		color,
 		alpha
 	);
+}
+
+void drawBoundaries(ExperimentRenderState state) {
 }

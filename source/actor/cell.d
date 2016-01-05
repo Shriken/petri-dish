@@ -57,7 +57,7 @@ class Cell {
 	}
 
 	void render(ref ExperimentRenderState state) {
-		state.drawRect(
+		state.fillRect(
 			pos - WorldCoords(rad, rad),
 			WorldCoords(rad * 2, rad * 2),
 			mode.color,

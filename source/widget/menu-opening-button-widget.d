@@ -22,7 +22,7 @@ class MenuOpeningButtonWidget : Widget {
 
 	override {
 		void renderSelf(State state) {
-			drawRect(
+			fillRect(
 				state.renderState,
 				RenderCoords(0, 0),
 				dimensions,
