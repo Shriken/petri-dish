@@ -28,16 +28,21 @@ RenderCoords worldToRenderCoords(
 	ExperimentRenderState state,
 	WorldCoords point
 ) {
-	return RenderCoords(
-		cast(int)point.x,
-		cast(int)point.y
-	) + state.widgetDimensions / 2;
+	auto zoomedPoint = state.zoomLevel * (point - state.centerPoint);
+	return (
+		state.widgetDimensions / 2 +
+		RenderCoords(
+			cast(int)zoomedPoint.x,
+			cast(int)zoomedPoint.y
+		)
+	);
 }
 
 RenderCoords worldToRenderDimensions(
 	ExperimentRenderState state,
 	WorldCoords dimensions
 ) {
+	dimensions *= state.zoomLevel;
 	return RenderCoords(cast(int)dimensions.x, cast(int)dimensions.y);
 }
 
