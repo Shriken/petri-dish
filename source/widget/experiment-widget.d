@@ -74,7 +74,7 @@ class ExperimentWidget : Widget {
 			}
 		}
 
-		void dragHandler(State state, SDL_MouseMotionEvent event) {
+		void motionHandler(State state, SDL_MouseMotionEvent event) {
 			// if the mouse is being dragged
 			if (event.state & SDL_BUTTON_LMASK) {
 				// pan viewport
