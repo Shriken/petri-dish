@@ -9,7 +9,7 @@ import misc.coords;
 import misc.resources;
 
 class RenderState {
-	RenderCoords windowDimensions = RenderCoords(640, 640);
+	RenderCoords windowDimensions = RenderCoords(1240, 800);
 	SDL_Window *window = null;
 	SDL_Renderer *renderer = null;
 
