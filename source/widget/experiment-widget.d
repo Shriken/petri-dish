@@ -18,6 +18,7 @@ import widget.experiment_render_utils;
  */
 class ExperimentWidget : Widget {
 	ExperimentRenderState renderState;
+	bool dragging = false;
 
 	this(RenderCoords offset, RenderCoords dimensions) {
 		super(offset, dimensions);
@@ -54,10 +55,15 @@ class ExperimentWidget : Widget {
 		}
 
 		void clickHandler(State state, SDL_MouseButtonEvent event) {
-			if (event.type == SDL_MOUSEBUTTONDOWN) {
-				auto renderPoint = RenderCoords(event.x, event.y);
-				auto point = renderState.renderToWorldCoords(renderPoint);
-				state.simState.addCell(point.x, point.y);
+			if (event.type == SDL_MOUSEBUTTONUP) {
+				if (dragging) {
+					dragging = false;
+				} else {
+					auto point = renderState.renderToWorldCoords(
+						RenderCoords(event.x, event.y)
+					);
+					state.simState.addCell(point.x, point.y);
+				}
 			}
 		}
 
@@ -65,6 +71,18 @@ class ExperimentWidget : Widget {
 			renderState.zoomLevel *= 1.01 ^^ event.y;
 			if (renderState.zoomLevel < 0.8) {
 				renderState.zoomLevel = 0.8;
+			}
+		}
+
+		void dragHandler(State state, SDL_MouseMotionEvent event) {
+			// if the mouse is being dragged
+			if (event.state & SDL_BUTTON_LMASK) {
+				// pan viewport
+				dragging = true;
+				renderState.centerPoint -= renderToWorldDimensions(
+					renderState,
+					RenderCoords(event.xrel, event.yrel)
+				);
 			}
 		}
 	}

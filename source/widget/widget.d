@@ -50,6 +50,9 @@ abstract class Widget {
 			case SDL_MOUSEWHEEL:
 				scrollHandler(state, event.wheel);
 				break;
+			case SDL_MOUSEMOTION:
+				dragHandler(state, event.motion);
+				break;
 			default:
 				break;
 		}
@@ -71,6 +74,7 @@ abstract class Widget {
 
 	void clickHandler(State state, SDL_MouseButtonEvent event);
 	void scrollHandler(State state, SDL_MouseWheelEvent event) {}
+	void dragHandler(State state, SDL_MouseMotionEvent event) {}
 
 	void updatePosition(RenderCoords offset, RenderCoords dimensions) {
 		this.offset = offset;

@@ -71,6 +71,7 @@ class UI {
 			case SDL_KEYDOWN:
 				handleKey(state, event.key.keysym.sym);
 				break;
+			case SDL_MOUSEBUTTONUP:
 			case SDL_MOUSEBUTTONDOWN:
 				handleClick(state, event.button);
 				break;
