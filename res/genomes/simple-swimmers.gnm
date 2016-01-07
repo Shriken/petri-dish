@@ -3,7 +3,7 @@ numModes: 16
 cellType: phagocyte
 makeAdhesin: true
 nutrientPriority: 1
-splitThreshold: 1.8
+splitThreshold: 0
 splitRatio: 1
 splitAngle: 0
 child1Rotation: 0
@@ -17,7 +17,7 @@ color: SDL_Color(255, 0, 0, 0)
 cellType: phagocyte
 makeAdhesin: false
 nutrientPriority: 1
-splitThreshold: 2.5
+splitThreshold: 3.0
 splitRatio: 1
 splitAngle: 1.5708
 child1Rotation: 0
