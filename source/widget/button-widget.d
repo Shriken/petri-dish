@@ -11,7 +11,6 @@ import widget.widget;
 
 alias ClickFunction = Typedef!(
 	void function(
-		ButtonWidget thisWidget,
 		State state,
 		SDL_MouseButtonEvent event
 	)
@@ -53,7 +52,9 @@ class ButtonWidget : Widget {
 		}
 
 		void clickHandler(State state, SDL_MouseButtonEvent event) {
-			this.clickFunc(this, state, event);
+			if (event.state is SDL_RELEASED) {
+				this.clickFunc(state, event);
+			}
 		}
 	}
 }

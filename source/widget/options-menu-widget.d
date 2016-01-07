@@ -18,7 +18,6 @@ class OptionsMenuWidget : MenuWidget {
 			"Back",
 			MENU_BUTTON_SIZE,
 			cast(ClickFunction)function(
-				ButtonWidget thisWidget,
 				State state,
 				SDL_MouseButtonEvent event
 			) {

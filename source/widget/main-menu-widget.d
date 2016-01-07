@@ -22,8 +22,7 @@ class MainMenuWidget : MenuWidget {
 
 		children ~= new ButtonDisplayClusterWidget(
 			MENU_BUTTON_SIZE,
-			cast(ClickFunction)function(
-				ButtonWidget thisWidget,
+			ClickFunction(function(
 				State state,
 				SDL_MouseButtonEvent event
 			) {
@@ -33,14 +32,13 @@ class MainMenuWidget : MenuWidget {
 					0,
 					simState.genomes.length - 1
 				);
-			},
+			}),
 			function(State state) {
 				return (
 					"Genome: " ~ to!string(state.simState.curGenomeIndex)
 				);
 			},
-			cast(ClickFunction)function(
-				ButtonWidget thisWidget,
+			ClickFunction(function(
 				State state,
 				SDL_MouseButtonEvent event
 			) {
@@ -50,7 +48,7 @@ class MainMenuWidget : MenuWidget {
 					0,
 					simState.genomes.length - 1
 				);
-			}
+			})
 		);
 
 		children ~= new MenuOpeningButtonWidget(
@@ -62,25 +60,23 @@ class MainMenuWidget : MenuWidget {
 		children ~= new ButtonWidget(
 			"Back",
 			MENU_BUTTON_SIZE,
-			cast(ClickFunction)function(
-				ButtonWidget thisWidget,
+			ClickFunction(function(
 				State state,
 				SDL_MouseButtonEvent event
 			) {
 				state.ui.popMenu();
-			}
+			})
 		);
 
 		children ~= new ButtonWidget(
 			"Quit",
 			MENU_BUTTON_SIZE,
-			cast(ClickFunction)function(
-				ButtonWidget thisWidget,
+			ClickFunction(function(
 				State state,
 				SDL_MouseButtonEvent event
 			) {
 				state.simState.running = false;
-			}
+			})
 		);
 
 		updatePosition(offset, dimensions);
