@@ -4,6 +4,7 @@ import std.conv;
 import gfm.math.vector;
 import derelict.sdl2.sdl;
 
+import misc.utils;
 import misc.coords;
 import state.state;
 import widget.menu_widget;
@@ -26,7 +27,12 @@ class MainMenuWidget : MenuWidget {
 				State state,
 				SDL_MouseButtonEvent event
 			) {
-				state.simState.curGenomeIndex--;
+				auto simState = state.simState;
+				simState.curGenomeIndex = bound(
+					--simState.curGenomeIndex,
+					0,
+					simState.genomes.length - 1
+				);
 			},
 			function(State state) {
 				return (
@@ -38,7 +44,12 @@ class MainMenuWidget : MenuWidget {
 				State state,
 				SDL_MouseButtonEvent event
 			) {
-				state.simState.curGenomeIndex++;
+				auto simState = state.simState;
+				simState.curGenomeIndex = bound(
+					++simState.curGenomeIndex,
+					0,
+					simState.genomes.length - 1
+				);
 			}
 		);
 
