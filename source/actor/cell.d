@@ -8,6 +8,7 @@ import std.algorithm;
 import gfm.math.vector;
 import derelict.sdl2.sdl;
 
+import consts;
 import genome;
 import misc.coords;
 import state.render_state;
@@ -31,6 +32,7 @@ class Cell {
 	// state variables for use in update
 	bool shouldDie = false;
 	double massChange = 0;
+	double angleChange = 0;
 
 	@disable this();
 
@@ -174,3 +176,20 @@ class Cell {
 		}
 	}
 };
+
+void updatePos(Cell cell) {
+	// update position
+	cell.pos += cell.vel;
+
+	// simulate viscosity
+	cell.vel *= VISCOSITY_SLOWING_FACTOR;
+
+	foreach (adhesedCell; cell.adhesedCells) {
+		auto posDiff = adhesedCell.pos - cell.pos;
+		auto radSum = cell.rad + adhesedCell.rad;
+		auto squaredDist = posDiff.squaredLength;
+		if (squaredDist > radSum ^^ 2) {
+			cell.vel += posDiff * 0.03;
+		}
+	}
+}

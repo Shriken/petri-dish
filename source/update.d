@@ -4,23 +4,19 @@ import std.random;
 import std.algorithm;
 import std.parallelism;
 
+import consts;
 import genome;
 import state.sim_state;
 import actor.cell;
 import actor.food;
 
-const double VISCOSITY = 1.1;
-const double VISCOSITY_SLOWING_FACTOR = 1 / VISCOSITY;
-
-// rate of mass flow through adhesin
-const double MASS_FLOW_RATE = 0.04;
-
 void update(SimulationState state) {
 	auto FIELD_RAD = state.FIELD_RAD;
 
 	// update cell positions
-	foreach (ref Cell cell; state.cells) {
-		updatePos(state, cell);
+	foreach (ref Cell cell; parallel(state.cells)) {
+		cell.updatePos();
+		constrainPos(state, cell);
 	}
 
 	Cell[] newCells;
@@ -90,12 +86,9 @@ void update(SimulationState state) {
 	}
 }
 
-void updatePos(SimulationState state, ref Cell cell) {
+void constrainPos(SimulationState state, Cell cell) {
 	auto FIELD_RAD = state.FIELD_RAD;
 	auto pos = &cell.pos;
-
-	// update position
-	cell.pos += cell.vel;
 
 	// constrain cell to field bounds
 	if (pos.x < -FIELD_RAD) {
@@ -112,18 +105,6 @@ void updatePos(SimulationState state, ref Cell cell) {
 	} else if (pos.y > FIELD_RAD) {
 		pos.y = 2 * FIELD_RAD - pos.y;
 		cell.vel.y *= -1;
-	}
-
-	// simulate viscosity
-	cell.vel *= VISCOSITY_SLOWING_FACTOR;
-
-	foreach (adhesedCell; cell.adhesedCells) {
-		auto posDiff = adhesedCell.pos - cell.pos;
-		auto radSum = cell.rad + adhesedCell.rad;
-		auto squaredDist = posDiff.squaredLength;
-		if (squaredDist > radSum ^^ 2) {
-			cell.vel += posDiff * 0.03;
-		}
 	}
 }
 
