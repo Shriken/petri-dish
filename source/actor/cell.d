@@ -89,12 +89,12 @@ class Cell {
 
 		if (oldMode.child2KeepAdhesin) {
 			foreach (cell; newCell.adhesedCells) {
-				assert(cell.adhesedCells.find(newCell).empty);
+				assert(!cell.isBoundTo(newCell));
 				cell.adheseWith(newCell);
 			}
 		} else {
 			foreach (cell; newCell.adhesedCells) {
-				assert(cell.adhesedCells.find(newCell).empty);
+				assert(!cell.isBoundTo(newCell));
 			}
 			newCell.adhesedCells.destroy();
 		}
@@ -109,7 +109,7 @@ class Cell {
 		if (!oldMode.child1KeepAdhesin) {
 			foreach (cell; adhesedCells) {
 				cell.unadheseWith(this);
-				assert(cell.adhesedCells.find(this).empty);
+				assert(!cell.isBoundTo(this));
 			}
 			adhesedCells.destroy();
 		}
@@ -194,4 +194,8 @@ void unadheseWith(Cell cell, Cell otherCell) {
 	cell.adhesedCells = cell.adhesedCells.remove!(SwapStrategy.unstable)(
 		index
 	);
+}
+
+bool isBoundTo(Cell cell, Cell otherCell) {
+	return any!(cell => cell is otherCell)(cell.adhesedCells);
 }
