@@ -5,6 +5,7 @@ import std.random;
 import derelict.sdl2.sdl;
 
 import genome;
+import misc.coords;
 import misc.resources;
 import actor.cell;
 import actor.food;
@@ -38,6 +39,6 @@ class SimulationState {
 
 	void addCell(double x, double y) {
 		auto genome = genomes[curGenomeIndex];
-		cells ~= new Cell(x, y, genome, &genome.cellModes[0]);
+		cells ~= new Cell(WorldCoords(x, y), genome, &genome.cellModes[0]);
 	}
 };

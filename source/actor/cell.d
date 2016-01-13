@@ -46,10 +46,6 @@ class Cell {
 		this.adhesedCells = cell.adhesedCells.dup;
 	}
 
-	this(double x, double y, Genome genome, CellMode *mode) {
-		this(WorldCoords(x, y), genome, mode);
-	}
-
 	this(WorldCoords pos, Genome genome, CellMode *mode) {
 		this.genome = genome;
 		this.mode = mode;
@@ -94,7 +90,7 @@ class Cell {
 		if (oldMode.child2KeepAdhesin) {
 			foreach (cell; newCell.adhesedCells) {
 				assert(cell.adhesedCells.find(newCell).empty);
-				cell.adhesedCells ~= newCell;
+				cell.adheseWith(newCell);
 			}
 		} else {
 			foreach (cell; newCell.adhesedCells) {
@@ -119,8 +115,8 @@ class Cell {
 		}
 
 		if (oldMode.makeAdhesin) {
-			adhesedCells ~= newCell;
-			newCell.adhesedCells ~= this;
+			this.adheseWith(newCell);
+			newCell.adheseWith(this);
 		}
 
 		return newCell;
@@ -131,11 +127,6 @@ class Cell {
 			cell.unadheseWith(this);
 		}
 		adhesedCells.destroy();
-	}
-
-	void unadheseWith(Cell cell) {
-		auto index = adhesedCells.countUntil(cell);
-		adhesedCells = adhesedCells.remove!(SwapStrategy.unstable)(index);
 	}
 
 	void gainMass(double amount) {
@@ -192,4 +183,15 @@ void updatePos(Cell cell) {
 			cell.vel += posDiff * 0.03;
 		}
 	}
+}
+
+void adheseWith(Cell cell, Cell otherCell) {
+	cell.adhesedCells ~= otherCell;
+}
+
+void unadheseWith(Cell cell, Cell otherCell) {
+	auto index = cell.adhesedCells.countUntil(otherCell);
+	cell.adhesedCells = cell.adhesedCells.remove!(SwapStrategy.unstable)(
+		index
+	);
 }
