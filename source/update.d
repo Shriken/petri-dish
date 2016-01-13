@@ -123,8 +123,8 @@ void handleSpecialAbility(SimulationState state, Cell cell) {
 			break;
 
 		case CellType.flagellocyte:
-			cell.vel.x += 0.1 * cos(cell.angle);
-			cell.vel.y += 0.1 * sin(cell.angle);
+			cell.vel.x += 0.1 * cos(cell.heading);
+			cell.vel.y += 0.1 * sin(cell.heading);
 			break;
 
 		case CellType.photocyte:

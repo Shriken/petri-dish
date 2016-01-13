@@ -23,7 +23,7 @@ class Cell {
 	WorldCoords pos;
 	WorldCoords vel;
 	double mass = 2;
-	double angle = 0;
+	double heading = 0;
 	CellMode *mode;
 	Genome genome;
 
@@ -32,7 +32,7 @@ class Cell {
 	// state variables for use in update
 	bool shouldDie = false;
 	double massChange = 0;
-	double angleChange = 0;
+	double headingChange = 0;
 
 	@disable this();
 
@@ -40,7 +40,7 @@ class Cell {
 		this.pos = cell.pos;
 		this.vel = cell.vel;
 		this.mass = cell.mass;
-		this.angle = cell.angle;
+		this.heading = cell.heading;
 		this.mode = cell.mode;
 		this.genome = cell.genome;
 		this.adhesedCells = cell.adhesedCells.dup;
@@ -51,7 +51,7 @@ class Cell {
 		this.mode = mode;
 		this.pos = pos;
 		this.vel = WorldCoords(0, 0);
-		this.angle = uniform(0, 2 * PI);
+		this.heading = uniform(0, 2 * PI);
 	}
 
 	void render(ref ExperimentRenderState state) {
@@ -79,10 +79,10 @@ class Cell {
 
 		// child 2
 		Cell newCell = new Cell(this);
-		newCell.vel.x -= cos(angle + oldMode.splitAngle);
-		newCell.vel.y -= sin(angle + oldMode.splitAngle);
-		newCell.angle = (
-			angle + oldMode.splitAngle + oldMode.child2Rotation
+		newCell.vel.x -= cos(heading + oldMode.splitAngle);
+		newCell.vel.y -= sin(heading + oldMode.splitAngle);
+		newCell.heading = (
+			heading + oldMode.splitAngle + oldMode.child2Rotation
 		) % 2 * PI;
 		newCell.mode = &genome.cellModes[oldMode.child2Mode];
 		newCell.mass /= 2;
@@ -100,10 +100,10 @@ class Cell {
 		}
 
 		// child 1
-		vel.x += cos(angle + oldMode.splitAngle);
-		vel.y += sin(angle + oldMode.splitAngle);
-		angle = (
-			angle + oldMode.splitAngle + oldMode.child1Rotation
+		vel.x += cos(heading + oldMode.splitAngle);
+		vel.y += sin(heading + oldMode.splitAngle);
+		heading = (
+			heading + oldMode.splitAngle + oldMode.child1Rotation
 		) % 2 * PI;
 		mode = &genome.cellModes[oldMode.child1Mode];
 		if (!oldMode.child1KeepAdhesin) {
