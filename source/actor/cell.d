@@ -14,6 +14,12 @@ import misc.coords;
 import state.render_state;
 import widget.experiment_render_utils;
 
+struct Adhesion {
+	// angle of adhesion with respect to owner's heading
+	double relativeAngle;
+	Cell cell;
+}
+
 class Cell {
 	static const double RAD_PER_MASS = 2;
 	static const double MIN_MASS = 0.65;
@@ -27,7 +33,7 @@ class Cell {
 	CellMode *mode;
 	Genome genome;
 
-	Cell[] adhesedCells;
+	Adhesion[] adhesions;
 
 	// state variables for use in update
 	bool shouldDie = false;
@@ -43,7 +49,7 @@ class Cell {
 		this.heading = cell.heading;
 		this.mode = cell.mode;
 		this.genome = cell.genome;
-		this.adhesedCells = cell.adhesedCells.dup;
+		this.adhesions = cell.adhesions.dup;
 	}
 
 	this(WorldCoords pos, Genome genome, CellMode *mode) {
@@ -63,10 +69,10 @@ class Cell {
 		);
 
 		// draw adhesin bonds
-		foreach (cell; adhesedCells) {
+		foreach (adhesion; adhesions) {
 			state.drawLine(
 				pos,
-				cell.pos,
+				adhesion.cell.pos,
 				SDL_Color(0xff, 0xff, 0xff),
 				0xff
 			);
@@ -77,26 +83,33 @@ class Cell {
 		auto oldMode = mode;
 		massChange -= mass / 2;
 
+		auto worldSplitAngle = heading + oldMode.splitAngle;
+
 		// child 2
 		Cell newCell = new Cell(this);
-		newCell.vel.x -= cos(heading + oldMode.splitAngle);
-		newCell.vel.y -= sin(heading + oldMode.splitAngle);
-		newCell.heading = (
-			heading + oldMode.splitAngle + oldMode.child2Rotation
-		) % 2 * PI;
+		newCell.vel.x -= cos(worldSplitAngle);
+		newCell.vel.y -= sin(worldSplitAngle);
+		newCell.heading = (worldSplitAngle + oldMode.child2Rotation) %
+			2 * PI;
 		newCell.mode = &genome.cellModes[oldMode.child2Mode];
 		newCell.mass /= 2;
 
+		// no one should be bound to the new cell yet
+		assert(!any!(cell => cell.isBoundTo(newCell))(
+			newCell.adhesedCells
+		));
+
 		if (oldMode.child2KeepAdhesin) {
+			// clone all the parent's adhesions
 			foreach (cell; newCell.adhesedCells) {
-				assert(!cell.isBoundTo(newCell));
-				cell.adheseWith(newCell);
+				cell.adheseWith(
+					newCell,
+					cell.angleTo(newCell)
+				);
 			}
 		} else {
-			foreach (cell; newCell.adhesedCells) {
-				assert(!cell.isBoundTo(newCell));
-			}
-			newCell.adhesedCells.destroy();
+			// remove any old adhesions
+			newCell.adhesions.destroy();
 		}
 
 		// child 1
@@ -107,26 +120,34 @@ class Cell {
 		) % 2 * PI;
 		mode = &genome.cellModes[oldMode.child1Mode];
 		if (!oldMode.child1KeepAdhesin) {
-			foreach (cell; adhesedCells) {
+			// unbind
+			foreach (cell; this.adhesedCells) {
 				cell.unadheseWith(this);
-				assert(!cell.isBoundTo(this));
 			}
-			adhesedCells.destroy();
+			adhesions.destroy();
+
+			assert(!any!(cell => cell.isBoundTo(this))(
+				this.adhesedCells
+			));
 		}
 
+		// make adhesin if necessary
 		if (oldMode.makeAdhesin) {
-			this.adheseWith(newCell);
-			newCell.adheseWith(this);
+			this.adheseWith(newCell, worldSplitAngle - heading);
+			newCell.adheseWith(
+				this,
+				PI + worldSplitAngle - newCell.heading
+			);
 		}
 
 		return newCell;
 	}
 
 	void die() {
-		foreach (cell; adhesedCells) {
+		foreach (cell; this.adhesedCells) {
 			cell.unadheseWith(this);
 		}
-		adhesedCells.destroy();
+		adhesions.destroy();
 	}
 
 	void gainMass(double amount) {
@@ -175,7 +196,10 @@ void updatePos(Cell cell) {
 	// simulate viscosity
 	cell.vel *= VISCOSITY_SLOWING_FACTOR;
 
-	foreach (adhesedCell; cell.adhesedCells) {
+	foreach (adhesion; cell.adhesions) {
+		auto adhesedCell = adhesion.cell;
+
+		// linear spring
 		auto posDiff = adhesedCell.pos - cell.pos;
 		auto radSum = cell.rad + adhesedCell.rad;
 		auto squaredDist = posDiff.squaredLength;
@@ -185,17 +209,52 @@ void updatePos(Cell cell) {
 	}
 }
 
-void adheseWith(Cell cell, Cell otherCell) {
-	cell.adhesedCells ~= otherCell;
+void adheseWith(Cell cell, Cell otherCell, double adhesionAngle) {
+	cell.adhesions ~= Adhesion(adhesionAngle, otherCell);
 }
 
 void unadheseWith(Cell cell, Cell otherCell) {
-	auto index = cell.adhesedCells.countUntil(otherCell);
-	cell.adhesedCells = cell.adhesedCells.remove!(SwapStrategy.unstable)(
+	size_t index;
+	for (index = 0; index < cell.adhesions.length; index++) {
+		if (cell.adhesions[index].cell is otherCell) {
+			break;
+		}
+	}
+
+	cell.adhesions = cell.adhesions.remove!(SwapStrategy.unstable)(
 		index
 	);
 }
 
 bool isBoundTo(Cell cell, Cell otherCell) {
-	return any!(cell => cell is otherCell)(cell.adhesedCells);
+	return any!(adhesion => adhesion.cell is otherCell)(cell.adhesions);
+}
+
+double angleTo(Cell cell, Cell otherCell) {
+	auto posDiff = otherCell.pos - cell.pos;
+	return atan2(posDiff.y, posDiff.x);
+}
+
+struct AdhesionRange {
+	Adhesion[] adhesions;
+
+	this(Adhesion[] adhesions) {
+		this.adhesions = adhesions;
+	}
+
+	@property bool empty() {
+		return adhesions.length == 0;
+	}
+
+	@property Cell front() {
+		return adhesions[0].cell;
+	}
+
+	@property void popFront() {
+		adhesions = adhesions[1 .. $];
+	}
+}
+
+AdhesionRange adhesedCells(Cell cell) {
+	return AdhesionRange(cell.adhesions);
 }
