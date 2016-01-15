@@ -61,6 +61,7 @@ class Cell {
 	}
 
 	void render(ref ExperimentRenderState state) {
+		// draw body
 		state.fillRect(
 			pos - WorldCoords(rad, rad),
 			WorldCoords(rad * 2, rad * 2),
@@ -68,6 +69,7 @@ class Cell {
 			0xff
 		);
 
+		// draw eye
 		auto eyeOffset = WorldCoords(
 			cos(heading) * rad / 2,
 			sin(heading) * rad / 2
@@ -81,6 +83,16 @@ class Cell {
 
 		// draw adhesin bonds
 		foreach (adhesion; adhesions) {
+			auto bondEyeOffset = WorldCoords(
+				cos(heading + adhesion.relativeAngle) * rad / 2,
+				sin(heading + adhesion.relativeAngle) * rad / 2
+			);
+			state.fillRect(
+				pos + bondEyeOffset,
+				WorldCoords(rad / 2, rad / 2),
+				SDL_Color(0xff, 0, 0),
+				0xff
+			);
 			state.drawLine(
 				pos,
 				adhesion.cell.pos,
