@@ -69,13 +69,21 @@ class Cell {
 			0xff
 		);
 
+		// draw center
+		state.fillRect(
+			pos - WorldCoords(rad / 4, rad / 4),
+			WorldCoords(rad / 2, rad / 2),
+			SDL_Color(0, 0, 0),
+			0xff
+		);
+
 		// draw eye
 		auto eyeOffset = WorldCoords(
 			cos(heading) * rad / 2,
 			sin(heading) * rad / 2
 		);
 		state.fillRect(
-			pos + eyeOffset,
+			pos - WorldCoords(rad / 4, rad / 4) + eyeOffset,
 			WorldCoords(rad / 2, rad / 2),
 			SDL_Color(0, 0, 0),
 			0xff
@@ -88,7 +96,7 @@ class Cell {
 				sin(heading + adhesion.relativeAngle) * rad / 2
 			);
 			state.fillRect(
-				pos + bondEyeOffset,
+				pos - WorldCoords(rad / 4, rad / 4) + bondEyeOffset,
 				WorldCoords(rad / 2, rad / 2),
 				SDL_Color(0xff, 0, 0),
 				0xff
@@ -127,7 +135,7 @@ class Cell {
 			foreach (cell; newCell.adhesedCells) {
 				cell.adheseWith(
 					newCell,
-					cell.angleTo(newCell)
+					cell.angleTo(newCell) - cell.heading
 				);
 			}
 		} else {
@@ -229,6 +237,17 @@ void updatePos(Cell cell) {
 		if (squaredDist > radSum ^^ 2) {
 			cell.vel += posDiff * 0.03;
 		}
+
+		// rotary spring
+		auto bondAngle = cell.heading + adhesion.relativeAngle;
+		auto realAngle = atan2(posDiff.y, posDiff.x);
+		cell.heading += ((bondAngle - realAngle) % (2 * PI)) * 0.01;
+		cell.heading %= 2 * PI;
+		if (cell.heading > PI) {
+			cell.heading -= 2 * PI;
+		}
+
+		// rotary spring: translational part
 	}
 }
 
