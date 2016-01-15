@@ -68,12 +68,23 @@ class Cell {
 			0xff
 		);
 
+		auto eyeOffset = WorldCoords(
+			cos(heading) * rad / 2,
+			sin(heading) * rad / 2
+		);
+		state.fillRect(
+			pos + eyeOffset,
+			WorldCoords(rad / 2, rad / 2),
+			SDL_Color(0, 0, 0),
+			0xff
+		);
+
 		// draw adhesin bonds
 		foreach (adhesion; adhesions) {
 			state.drawLine(
 				pos,
 				adhesion.cell.pos,
-				SDL_Color(0xff, 0xff, 0xff),
+				SDL_Color(0xff, 0, 0),
 				0xff
 			);
 		}
