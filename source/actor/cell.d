@@ -164,10 +164,10 @@ class Cell {
 
 		// make adhesin if necessary
 		if (oldMode.makeAdhesin) {
-			this.adheseWith(newCell, worldSplitAngle - heading);
+			this.adheseWith(newCell, PI + worldSplitAngle - heading);
 			newCell.adheseWith(
 				this,
-				PI + worldSplitAngle - newCell.heading
+				worldSplitAngle - newCell.heading
 			);
 		}
 
