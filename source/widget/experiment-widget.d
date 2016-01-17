@@ -1,6 +1,7 @@
 module widget.experiment_widget;
 
 import std.conv;
+import std.datetime;
 import derelict.sdl2.sdl;
 
 static import render_utils;
@@ -12,13 +13,23 @@ import state.render_state;
 import widget.widget;
 import widget.experiment_render_utils;
 
+enum DragState {
+	notDragging,
+	notYetDragging,
+	dragging
+}
+
 /**
  * Widget that displays an experiment
  * Can't think of a better name right now
  */
 class ExperimentWidget : Widget {
+	const Duration TIME_DEADZONE = dur!"msecs"(100);
+
 	ExperimentRenderState renderState;
-	bool dragging = false;
+
+	DragState dragState = DragState.notDragging;
+	SysTime dragStart;
 
 	this(RenderCoords offset, RenderCoords dimensions) {
 		super(offset, dimensions);
@@ -55,15 +66,20 @@ class ExperimentWidget : Widget {
 		}
 
 		void clickHandler(State state, SDL_MouseButtonEvent event) {
-			if (event.type == SDL_MOUSEBUTTONUP) {
-				if (dragging) {
-					dragging = false;
-				} else {
+			if (event.type is SDL_MOUSEBUTTONUP) {
+				// if we weren't dragging, we clicked
+				if (dragState is DragState.notYetDragging) {
 					auto point = renderState.renderToWorldCoords(
 						RenderCoords(event.x, event.y)
 					);
 					state.simState.addCell(point.x, point.y);
 				}
+
+				// done dragging
+				dragState = DragState.notDragging;
+			} else if (event.type is SDL_MOUSEBUTTONDOWN) {
+				dragState = DragState.notYetDragging;
+				dragStart = Clock.currTime;
 			}
 		}
 
@@ -75,14 +91,22 @@ class ExperimentWidget : Widget {
 		}
 
 		void motionHandler(State state, SDL_MouseMotionEvent event) {
-			// if the mouse is being dragged
 			if (event.state & SDL_BUTTON_LMASK) {
-				// pan viewport
-				dragging = true;
-				renderState.centerPoint -= renderToWorldDimensions(
-					renderState,
-					RenderCoords(event.xrel, event.yrel)
-				);
+				if (
+					dragState is DragState.notYetDragging &&
+					Clock.currTime - dragStart > TIME_DEADZONE
+				) {
+					dragState = DragState.dragging;
+				}
+
+				// if the mouse is being dragged
+				if (dragState is DragState.dragging) {
+					// pan viewport
+					renderState.centerPoint -= renderToWorldDimensions(
+						renderState,
+						RenderCoords(event.xrel, event.yrel)
+					);
+				}
 			}
 		}
 	}
