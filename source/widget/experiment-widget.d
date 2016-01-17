@@ -29,7 +29,8 @@ class ExperimentWidget : Widget {
 	ExperimentRenderState renderState;
 
 	DragState dragState = DragState.notDragging;
-	SysTime dragStart;
+	RenderCoords dragMovement;
+	SysTime dragStartTime;
 
 	this(RenderCoords offset, RenderCoords dimensions) {
 		super(offset, dimensions);
@@ -79,7 +80,8 @@ class ExperimentWidget : Widget {
 				dragState = DragState.notDragging;
 			} else if (event.type is SDL_MOUSEBUTTONDOWN) {
 				dragState = DragState.notYetDragging;
-				dragStart = Clock.currTime;
+				dragStartTime = Clock.currTime;
+				dragMovement = RenderCoords(0, 0);
 			}
 		}
 
@@ -94,9 +96,13 @@ class ExperimentWidget : Widget {
 			if (event.state & SDL_BUTTON_LMASK) {
 				if (
 					dragState is DragState.notYetDragging &&
-					Clock.currTime - dragStart > TIME_DEADZONE
+					Clock.currTime - dragStartTime > TIME_DEADZONE
 				) {
 					dragState = DragState.dragging;
+					renderState.centerPoint -= renderToWorldDimensions(
+						renderState,
+						dragMovement
+					);
 				}
 
 				// if the mouse is being dragged
@@ -106,6 +112,8 @@ class ExperimentWidget : Widget {
 						renderState,
 						RenderCoords(event.xrel, event.yrel)
 					);
+				} else {
+					dragMovement += RenderCoords(event.xrel, event.yrel);
 				}
 			}
 		}
