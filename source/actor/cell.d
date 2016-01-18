@@ -27,9 +27,10 @@ class Cell {
 	static const double DEVOROCYTE_CONSUMPTION_RATE = 0.3;
 
 	WorldCoords pos;
-	WorldCoords vel;
+	WorldCoords vel = WorldCoords(0, 0);
 	double mass = 2;
 	double heading = 0;
+	double deltaHeading = 0;
 	CellMode *mode;
 	Genome genome;
 
@@ -56,8 +57,6 @@ class Cell {
 		this.genome = genome;
 		this.mode = mode;
 		this.pos = pos;
-		this.vel = WorldCoords(0, 0);
-		this.heading = uniform(0, 2 * PI);
 	}
 
 	void render(ref ExperimentRenderState state) {
@@ -91,6 +90,20 @@ class Cell {
 
 		// draw adhesin bonds
 		foreach (adhesion; adhesions) {
+			state.drawLine(
+				pos,
+				adhesion.cell.pos,
+				SDL_Color(0xff, 0, 0),
+				0xff
+			);
+		}
+
+		debugRender(state);
+	}
+
+	void debugRender(ExperimentRenderState state) {
+		// draw red dots to indicate desired bond direction
+		foreach (adhesion; adhesions) {
 			auto bondEyeOffset = WorldCoords(
 				cos(heading + adhesion.relativeAngle) * rad / 2,
 				sin(heading + adhesion.relativeAngle) * rad / 2
@@ -98,12 +111,6 @@ class Cell {
 			state.fillRect(
 				pos - WorldCoords(rad / 4, rad / 4) + bondEyeOffset,
 				WorldCoords(rad / 2, rad / 2),
-				SDL_Color(0xff, 0, 0),
-				0xff
-			);
-			state.drawLine(
-				pos,
-				adhesion.cell.pos,
 				SDL_Color(0xff, 0, 0),
 				0xff
 			);
@@ -218,14 +225,16 @@ class Cell {
 			}
 		}
 	}
-};
+}
 
 void updatePos(Cell cell) {
 	// update position
 	cell.pos += cell.vel;
+	cell.heading += cell.deltaHeading;
 
 	// simulate viscosity
 	cell.vel *= VISCOSITY_SLOWING_FACTOR;
+	cell.deltaHeading *= HEADING_VISCOSITY_FACTOR;
 
 	foreach (adhesion; cell.adhesions) {
 		auto adhesedCell = adhesion.cell;
@@ -241,13 +250,17 @@ void updatePos(Cell cell) {
 		// rotary spring
 		auto bondAngle = cell.heading + adhesion.relativeAngle;
 		auto realAngle = atan2(posDiff.y, posDiff.x);
-		cell.heading += ((bondAngle - realAngle) % (2 * PI)) * 0.01;
-		cell.heading %= 2 * PI;
-		if (cell.heading > PI) {
-			cell.heading -= 2 * PI;
+		auto angleDiff = (realAngle - bondAngle) % (2 * PI);
+		if (angleDiff > PI) {
+			angleDiff -= 2 * PI;
 		}
+		cell.deltaHeading += angleDiff ^^ 3 * 0.03;
 
 		// rotary spring: translational part
+		auto tangentVector = WorldCoords(-posDiff.y, posDiff.x);
+		tangentVector.normalize();
+		tangentVector *= angleDiff * 0.05;
+		cell.vel += tangentVector;
 	}
 }
 

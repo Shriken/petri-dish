@@ -40,7 +40,7 @@ child1KeepAdhesin: true
 child2Rotation: 0
 child2Mode: 2
 child2KeepAdhesin: true
-color: SDL_Color(255, 255, 255, 0)
+color: SDL_Color(100, 100, 255, 0)
 
 cellType: phagocyte
 makeAdhesin: false
