@@ -5,3 +5,6 @@ Inspired by the [Cell Lab](https://play.google.com/store/apps/details?id=com.sat
 
 ### Setup + Run
 Just run `dub`, the D package manager, in the home directory.
+
+To install dub [look here.](https://code.dlang.org/download)
+To install a D compiler [look here.](dlang.org/download.html)
