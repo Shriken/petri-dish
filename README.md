@@ -11,3 +11,5 @@ Just run `dub`, the D package manager, in the home directory.
 
 To install dub [look here.](https://code.dlang.org/download)
 To install a D compiler [look here.](dlang.org/download.html)
+
+Click to add more cells. Escape to open the menu and select different cell types.
